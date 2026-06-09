@@ -1,0 +1,13 @@
+{
+  "name": "keygen-tool",
+  "version": "1.0.0",
+  "description": "Générateur de clés d'activation — Gestion Cyber",
+  "scripts": {
+    "generate": "ts-node generate.ts"
+  },
+  "dependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0"
+  }
+}
