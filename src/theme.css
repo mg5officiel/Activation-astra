@@ -1,0 +1,219 @@
+/* ── Jetons de couleur : une feuille de cahier Seyès, encre de stylo bille bleue ── */
+:root {
+  --page: #F8FAFE;
+  --rule: #CBD6F1;
+  --rule-faint: #E9EEF9;
+  --margin: #E0566B;
+  --ink: #14206B;
+  --ink-soft: #4F5B99;
+  --accent: #2340D8;
+  --on-accent: #FFFFFF;
+  --field: #FFFFFF;
+  --field-border: #8E9ACB;
+  --danger: #B3261E;
+  --ok: #1B6B3A;
+
+  /* Le ticket reste du papier clair, même en thème sombre */
+  --ticket: #FFFFFF;
+  --ticket-ink: #14206B;
+  --ticket-soft: #5B67A8;
+  --ticket-rule: #B9C3E6;
+
+  --mono: 'Courier Prime', 'Courier New', Courier, monospace;
+  --sans: 'Public Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  /* Variables Ionic */
+  --ion-font-family: var(--sans);
+  --ion-background-color: var(--page);
+  --ion-background-color-rgb: 248, 250, 254;
+  --ion-text-color: var(--ink);
+  --ion-text-color-rgb: 20, 32, 107;
+  --ion-border-color: var(--rule);
+  --ion-color-primary: #2340D8;
+  --ion-color-primary-rgb: 35, 64, 216;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #1f39bf;
+  --ion-color-primary-tint: #3954dd;
+  --ion-color-danger: #B3261E;
+  --ion-color-danger-rgb: 179, 38, 30;
+  --ion-color-danger-contrast: #ffffff;
+  --ion-color-danger-contrast-rgb: 255, 255, 255;
+  --ion-color-danger-shade: #9e211a;
+  --ion-color-danger-tint: #bb3b34;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page: #121A3A;
+    --rule: #243063;
+    --rule-faint: #1A2350;
+    --margin: #D0526A;
+    --ink: #E6EAFF;
+    --ink-soft: #9AA6DD;
+    --accent: #8AA0FF;
+    --on-accent: #0B1024;
+    --field: #0E1533;
+    --field-border: #5A68B0;
+    --danger: #FF8A80;
+    --ok: #7ED9A0;
+
+    --ion-background-color-rgb: 18, 26, 58;
+    --ion-text-color-rgb: 230, 234, 255;
+    --ion-color-primary: #8AA0FF;
+    --ion-color-primary-rgb: 138, 160, 255;
+    --ion-color-primary-contrast: #0B1024;
+    --ion-color-primary-contrast-rgb: 11, 16, 36;
+    --ion-color-primary-shade: #7a8ce0;
+    --ion-color-primary-tint: #97a9ff;
+    --ion-color-danger: #FF8A80;
+    --ion-color-danger-rgb: 255, 138, 128;
+    --ion-color-danger-contrast: #0B1024;
+    --ion-color-danger-contrast-rgb: 11, 16, 36;
+    --ion-color-danger-shade: #e07971;
+    --ion-color-danger-tint: #ff958c;
+  }
+}
+
+/* ── Structure Ionic ── */
+ion-content { --background: var(--page); }
+ion-toolbar { --background: var(--page); --color: var(--ink); --border-color: var(--rule); }
+ion-title { font: 700 20px/1.2 var(--mono); }
+ion-button { text-transform: none; letter-spacing: 0; font-weight: 600; --border-radius: 6px; margin-left: 0; margin-right: 0; }
+ion-button[size='large'] { --padding-top: 0; --padding-bottom: 0; }
+ion-item-option { text-transform: none; font-weight: 600; }
+
+ion-footer ion-toolbar { --border-width: 1px 0 0; }
+ion-segment { --background: transparent; }
+ion-segment-button {
+  --color: var(--ink-soft);
+  --color-checked: var(--accent);
+  --indicator-color: var(--accent);
+  --padding-top: 4px;
+  --padding-bottom: 4px;
+  min-height: 54px;
+  text-transform: none;
+  font-weight: 600;
+}
+
+ion-input {
+  --background: var(--field);
+  --color: var(--ink);
+  --border-color: var(--field-border);
+  --border-radius: 6px;
+  --highlight-color-focused: var(--accent);
+  --padding-start: 14px;
+  --padding-end: 14px;
+  min-height: 56px;
+  font-size: 16px;
+}
+ion-input.mid .native-input { font-family: var(--mono); font-size: 22px; font-weight: 700; letter-spacing: .08em; }
+
+/* ── La page : une feuille Seyès avec sa marge rouge ── */
+.sheet {
+  position: relative;
+  min-height: 100%;
+  padding: 20px 16px 32px 46px;
+  background-color: var(--page);
+  background-image:
+    linear-gradient(90deg, var(--rule-faint) 1px, transparent 1px),
+    linear-gradient(var(--rule) 1px, transparent 1px),
+    linear-gradient(var(--rule-faint) 1px, transparent 1px);
+  background-size: 32px 32px, 32px 32px, 32px 8px;
+}
+.sheet::before {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 2px;
+  background: var(--margin);
+  opacity: .75;
+}
+.sheet [hidden] { display: none; }
+
+.lede { margin: 0 0 20px; color: var(--ink-soft); font-size: 15px; }
+.field { margin-bottom: 4px; }
+.hint { min-height: 1.5em; margin: 6px 0 12px; font-size: 13.5px; color: var(--ink-soft); }
+.hint[data-state='error'] { color: var(--danger); }
+.hint[data-state='ok'] { color: var(--ok); }
+
+/* ── Résultat : un ticket qui sort de l'imprimante ── */
+.result { margin-top: 28px; }
+.ticket-wrap { filter: drop-shadow(0 6px 10px rgba(20, 32, 107, .2)); }
+.ticket {
+  --cut: 48px;
+  position: relative;
+  background: var(--ticket);
+  color: var(--ticket-ink);
+  border-radius: 8px;
+  -webkit-mask:
+    radial-gradient(circle 10px at 0 var(--cut), #0000 98%, #000 100%),
+    radial-gradient(circle 10px at 100% var(--cut), #0000 98%, #000 100%);
+  -webkit-mask-composite: source-in;
+  mask:
+    radial-gradient(circle 10px at 0 var(--cut), #0000 98%, #000 100%),
+    radial-gradient(circle 10px at 100% var(--cut), #0000 98%, #000 100%);
+  mask-composite: intersect;
+}
+.ticket::after {
+  content: "";
+  position: absolute; left: 14px; right: 14px; top: var(--cut);
+  border-top: 2px dashed var(--ticket-rule);
+}
+.ticket-head {
+  height: var(--cut);
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 0 20px;
+  font-size: 13.5px; color: var(--ticket-soft);
+}
+.ticket-head b { font: 700 16px var(--mono); letter-spacing: .05em; color: var(--ticket-ink); }
+.ticket-body { padding: 22px 20px 26px; }
+.key {
+  display: flex; flex-wrap: wrap; gap: 4px 0;
+  margin: 0;
+  font: 700 clamp(18px, 5.4vw, 28px)/1.25 var(--mono);
+  letter-spacing: .04em;
+  user-select: all;
+  -webkit-user-select: all;
+}
+.key .g:not(:last-child)::after { content: "-"; margin: 0 .18em; color: var(--ticket-soft); }
+
+.ticket.print { animation: print .6s cubic-bezier(.2, .7, .2, 1) both; }
+@keyframes print {
+  from { clip-path: inset(0 0 100% 0); transform: translateY(-14px); }
+  to   { clip-path: inset(0 0 0 0);    transform: none; }
+}
+@media (prefers-reduced-motion: reduce) { .ticket.print { animation: none; } }
+
+.actions { margin-top: 16px; }
+.actions ion-button { margin: 0 0 8px; }
+.note { margin: 4px 0 0; font-size: 13.5px; color: var(--ink-soft); }
+
+/* ── Historique ── */
+.h-list { padding: 0; background: var(--page); border: 1.5px solid var(--ink); border-radius: 6px; overflow: hidden; }
+.h-item { --background: var(--page); --padding-start: 14px; --inner-padding-end: 14px; --border-color: var(--rule); }
+.h-list ion-item-sliding:last-of-type .h-item { --border-width: 0; }
+.h-body { width: 100%; padding: 12px 0; }
+.h-top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 2px 12px; }
+.h-client { font-weight: 600; }
+.h-client.empty { font-weight: 400; color: var(--ink-soft); }
+.h-date { font-size: 13.5px; color: var(--ink-soft); }
+.h-key { margin-top: 2px; font: 700 clamp(13px, 4vw, 16px)/1.3 var(--mono); letter-spacing: .02em; overflow-wrap: anywhere; }
+.h-mid { font-size: 13.5px; color: var(--ink-soft); }
+.h-mid code { font-family: var(--mono); font-weight: 700; letter-spacing: .05em; }
+.h-actions { display: flex; gap: 8px; margin-top: 10px; }
+.h-actions ion-button { margin: 0; }
+
+.empty-state {
+  margin: 0; padding: 20px 16px;
+  color: var(--ink-soft);
+  background: var(--page);
+  border: 1.5px dashed var(--field-border);
+  border-radius: 6px;
+}
+
+.warn {
+  margin: 36px 0 0; padding-left: 14px;
+  border-left: 3px solid var(--margin);
+  font-size: 13.5px; color: var(--ink-soft);
+}
