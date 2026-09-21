@@ -1,5 +1,5 @@
 import { hmacSign } from './crypto';
-//npx ts-node generate.ts "machine-id"
+//npx ts-node generate.ts "2493416d"
 const CHARS = 'BCDFGHJKMNPQRTVWXY2346789';
 
 function toBase25(hex: string, length: number): string {
