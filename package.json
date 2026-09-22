@@ -1,9 +1,9 @@
 {
-  "name": "cles-cyber-mobile",
+  "name": "astra-key",
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Générateur de clés d'activation — Gestion Cyber (Ionic + Capacitor)",
+  "description": "Générateur de clés d'activation — Astra Key (Ionic + Capacitor)",
   "scripts": {
     "dev": "vite --host",
     "build": "tsc --noEmit && vite build",
