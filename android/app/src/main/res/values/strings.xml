@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Clés Cyber</string>
-    <string name="title_activity_main">Clés Cyber</string>
+    <string name="app_name">Astra Key</string>
+    <string name="title_activity_main">Astra Key</string>
     <string name="package_name">com.gestioncyber.keygen</string>
     <string name="custom_url_scheme">com.gestioncyber.keygen</string>
 </resources>
