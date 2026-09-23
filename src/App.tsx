@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { IonApp, IonButton, IonButtons, IonContent, IonFooter, IonHeader, IonIcon, IonLabel, IonPage, IonSegment, IonSegmentButton, IonToolbar, setupIonicReact, useIonAlert } from '@ionic/react';
+import { IonApp, IonButton, IonButtons, IonContent, IonFooter, IonHeader, IonIcon, IonPage, IonSegment, IonSegmentButton, IonToolbar, setupIonicReact, useIonAlert } from '@ionic/react';
 import { keyOutline, timeOutline } from 'ionicons/icons';
 import Generate from './pages/Generate';
 import History from './pages/History';
