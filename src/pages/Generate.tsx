@@ -75,7 +75,7 @@ export default function Generate({ onCreated }: { onCreated: (entry: KeyEntry) =
       <div className="screen-heading">
         <span className="eyebrow">NOUVELLE ACTIVATION</span>
         <h1>Générer une clé</h1>
-        <p>Créez une clé d’activation en quelques secondes.</p>
+        <p>Entrez les informations ci-dessous pour générer une clé d’activation sécurisée.</p>
       </div>
 
       <section className="generate-card">
