@@ -134,17 +134,21 @@ export default function Generate({ onCreated }: { onCreated: (entry: KeyEntry) =
         {/* Date d'expiration */}
         <div className="field">
           <label className="visual-label">Date d'expiration</label>
-          <div className="date-select-wrapper">
+          <div className="date-select-wrapper" onClick={() => document.getElementById('date-picker')?.showPicker()}>
             <IonIcon icon={calendarOutline} className="leading" />
-            <IonInput
-              className="visual-input"
+            <span className={`date-display ${expiration ? 'date-display--set' : ''}`}>
+              {expiration
+                ? new Date(expiration + 'T00:00:00').toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' })
+                : 'Sélectionnez une date'}
+            </span>
+            <input
+              id="date-picker"
               type="date"
               value={expiration}
               min={localIsoDate(1)}
               max={localIsoDate(3650)}
-              enterkeyhint="next"
-              onIonInput={(e) => { setExpiration(String(e.detail.value ?? '')); setSubmitError(null); }}
-              onKeyDown={onEnter}
+              style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', width: 0, height: 0 }}
+              onChange={(e) => { setExpiration(e.target.value); setSubmitError(null); }}
             />
             <IonIcon icon={chevronDownOutline} className="chevron" />
           </div>
@@ -174,7 +178,7 @@ export default function Generate({ onCreated }: { onCreated: (entry: KeyEntry) =
         <IonButton className="primary-action" expand="block" size="large" onClick={() => void submit()}>
           <IonIcon slot="start" icon={sparklesOutline} />
           Générer la clé
-          <span slot="end" style={{opacity:0, fontSize:'0px'}}>›</span>
+          <span slot="end" className="cta-arrow">→</span>
         </IonButton>
 
         {/* Feature strip */}
