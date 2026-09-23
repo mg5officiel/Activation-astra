@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { IonButton, IonIcon, IonInput, useIonToast } from '@ionic/react';
-import { copyOutline, shareSocialOutline } from 'ionicons/icons';
+import { calendarOutline, copyOutline, desktopOutline, flashOutline, lockClosedOutline, personOutline, shareSocialOutline, shieldCheckmarkOutline, sparklesOutline } from 'ionicons/icons';
 
 import Ticket from '../components/Ticket';
 import { copyText, shareMessage } from '../lib/actions';
@@ -78,78 +78,94 @@ export default function Generate({ onCreated }: { onCreated: (entry: KeyEntry) =
         <p>Créez une clé d’activation en quelques secondes.</p>
       </div>
 
-      <div className="field">
-        <IonInput
-          className="mid"
-          label="ID machine"
-          labelPlacement="stacked"
-          fill="outline"
-          placeholder="a3f7c291"
-          value={mid}
-          maxlength={8}
-          autocapitalize="off"
-          autocorrect={false}
-          spellcheck={false}
-          enterkeyhint="next"
-          onIonInput={(e) => { setMid(String(e.detail.value ?? '')); setSubmitError(null); }}
-          onKeyDown={onEnter}
-        />
-        <p className="hint" data-state={hintState} aria-live="polite">{hint}</p>
-      </div>
+      <section className="generate-card">
+        <div className="field">
+          <label className="visual-label"><IonIcon icon={desktopOutline} />ID Machine</label>
+          <IonInput
+            className="visual-input mid"
+            fill="outline"
+            placeholder="Ex : a3f7c291"
+            value={mid}
+            maxlength={8}
+            autocapitalize="off"
+            autocorrect={false}
+            spellcheck={false}
+            enterkeyhint="next"
+            onIonInput={(e) => { setMid(String(e.detail.value ?? '')); setSubmitError(null); }}
+            onKeyDown={onEnter}
+          />
+          <p className="hint" data-state={hintState} aria-live="polite">{hint}</p>
+        </div>
 
-      <div className="field">
-        <IonInput
-          type="password"
-          label="Phrase secrète"
-          labelPlacement="stacked"
-          fill="outline"
-          placeholder="Votre phrase secrète de signature"
-          value={secret}
-          maxlength={200}
-          autocapitalize="off"
-          autocorrect={false}
-          spellcheck={false}
-          enterkeyhint="next"
-          onIonInput={(e) => { setSecret(String(e.detail.value ?? '')); setSubmitError(null); }}
-          onKeyDown={onEnter}
-        />
-        <p className="hint">Elle sert directement à signer la clé. Elle n'est pas enregistrée dans l'historique.</p>
-      </div>
+        <div className="field">
+          <label className="visual-label"><IonIcon icon={lockClosedOutline} />Phrase secrète</label>
+          <IonInput
+            className="visual-input"
+            type="password"
+            fill="outline"
+            placeholder="Entrez votre phrase secrète"
+            value={secret}
+            maxlength={200}
+            autocapitalize="off"
+            autocorrect={false}
+            spellcheck={false}
+            enterkeyhint="next"
+            onIonInput={(e) => { setSecret(String(e.detail.value ?? '')); setSubmitError(null); }}
+            onKeyDown={onEnter}
+          />
+          <p className="hint">Utilisée pour signer la clé. Elle n'est jamais enregistrée.</p>
+        </div>
 
-      <div className="field">
-        <IonInput
-          type="date"
-          label="Date d'expiration"
-          labelPlacement="stacked"
-          fill="outline"
-          value={expiration}
-          min={localIsoDate(1)}
-          max={localIsoDate(3650)}
-          enterkeyhint="next"
-          onIonInput={(e) => { setExpiration(String(e.detail.value ?? '')); setSubmitError(null); }}
-          onKeyDown={onEnter}
-        />
-        <p className="hint">La clé sera valable jusqu'à cette date.</p>
-      </div>
+        <div className="field">
+          <label className="visual-label"><IonIcon icon={calendarOutline} />Date d'expiration</label>
+          <IonInput
+            className="visual-input"
+            type="date"
+            fill="outline"
+            value={expiration}
+            min={localIsoDate(1)}
+            max={localIsoDate(3650)}
+            enterkeyhint="next"
+            onIonInput={(e) => { setExpiration(String(e.detail.value ?? '')); setSubmitError(null); }}
+            onKeyDown={onEnter}
+          />
+          <p className="hint">La durée de validité est calculée automatiquement.</p>
+        </div>
 
-      <div className="field">
-        <IonInput
-          label="Nom du client (facultatif)"
-          labelPlacement="stacked"
-          fill="outline"
-          placeholder="Ex. Cyber Baobab"
-          value={client}
-          maxlength={60}
-          enterkeyhint="go"
-          onIonInput={(e) => setClient(String(e.detail.value ?? ''))}
-          onKeyDown={onEnter}
-        />
-        <p className="hint">Apparaît dans le message envoyé et dans l'historique.</p>
-      </div>
+        <div className="field">
+          <label className="visual-label"><IonIcon icon={personOutline} />Nom du client <span>(facultatif)</span></label>
+          <IonInput
+            className="visual-input"
+            fill="outline"
+            placeholder="Entrez le nom du client"
+            value={client}
+            maxlength={60}
+            enterkeyhint="go"
+            onIonInput={(e) => setClient(String(e.detail.value ?? ''))}
+            onKeyDown={onEnter}
+          />
+          <p className="hint">Apparaît dans l'historique et le message envoyé.</p>
+        </div>
 
-      <IonButton className="primary-action" expand="block" size="large" onClick={() => void submit()}>
-        Générer la clé
-      </IonButton>
+        <IonButton className="primary-action" expand="block" size="large" onClick={() => void submit()}>
+          <IonIcon slot="start" icon={sparklesOutline} />
+          Générer la clé
+          <IonIcon slot="end" icon={shareSocialOutline} style={{visibility:'hidden'}} />
+        </IonButton>
+
+        <div className="feature-strip" aria-label="Avantages">
+          <div><IonIcon icon={shieldCheckmarkOutline}/><span>Sécurisé</span></div>
+          <div><IonIcon icon={flashOutline}/><span>Rapide</span></div>
+          <div><IonIcon icon={lockClosedOutline}/><span>Fiable</span></div>
+        </div>
+      </section>
+
+      <section className="how-it-works">
+        <h2>Comment ça marche ?</h2>
+        <div className="step"><b>1</b><div><strong>Saisissez les informations</strong><span>ID machine, phrase secrète et expiration.</span></div></div>
+        <div className="step"><b>2</b><div><strong>Générez la clé</strong><span>Notre système crée une clé d'activation unique.</span></div></div>
+        <div className="step"><b>3</b><div><strong>Envoyez au client</strong><span>Partagez la clé en toute sécurité.</span></div></div>
+      </section>
 
       {current && (
         <section className="result" aria-label="Clé générée">
