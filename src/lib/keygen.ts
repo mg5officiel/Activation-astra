@@ -60,7 +60,7 @@ export async function generateActivationKey(
   const iat = isoDate(now);
   const exp = isoDate(addDays(now, durationDays));
   const expCompact = exp.replace(/-/g, '');
-  const dataToSign = `v=2|mid=${mid}|iat=${iat}|exp=${exp}`;
+  const dataToSign = `v=2|mid=${mid}|exp=${exp}`;
   const sig = await hmacSign(dataToSign, secret, forceFallback);
   const payload = mid + expCompact + sig.slice(0, 8);
   return { key: formatKey(toBase25(payload, 25)), mid, iat, exp, durationDays };
