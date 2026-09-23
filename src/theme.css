@@ -20,11 +20,23 @@ border:1px solid #e8edf3;box-shadow:0 2px 7px rgba(16,24,40,.045);overflow:hidde
 }.brand-logo img{width:21px;height:21px;object-fit:contain}.brand-name{display:block;font-weight:800;font-size:13px;letter-spacing:-.02em}.brand-subtitle{display:block;margin-top:0;color:var(--muted);font-size:7px;font-weight:500}
 .clear-button{--color:var(--accent);font-size:13px;--padding-start:8px;--padding-end:8px}
 
-.sheet{min-height:100%;box-sizing:border-box;padding:26px 18px calc(105px + env(safe-area-inset-bottom));background:#fff}
+.sheet{min-height:100%;box-sizing:border-box;padding:22px 18px calc(80px + env(safe-area-inset-bottom));background:#fff}
 .sheet [hidden]{display:none}
-.screen-heading{margin:0 2px 26px}.screen-heading .eyebrow{display:block;margin-bottom:7px;color:var(--accent);font-size:10px;font-weight:800;letter-spacing:.12em}.screen-heading h1{margin:0;color:#101828;font-size:29px;line-height:1.12;letter-spacing:-.045em;font-weight:800}.screen-heading p{margin:8px 0 0;color:var(--ink-soft);font-size:14px;line-height:1.5}
+.screen-heading{margin:0 2px 22px}.screen-heading .eyebrow{display:block;margin-bottom:7px;color:var(--accent);font-size:10px;font-weight:800;letter-spacing:.12em}.screen-heading h1{margin:0;color:#101d3a;font-size:30px;line-height:1.12;letter-spacing:-.045em;font-weight:800}.screen-heading p{margin:8px 0 0;color:var(--ink-soft);font-size:14px;line-height:1.5}
 .lede{margin:0 0 22px;color:var(--ink-soft);font-size:14px;line-height:1.6}
-.field{margin-bottom:15px}.hint{min-height:1.25em;margin:6px 4px 11px;font-size:11.5px;color:var(--muted);line-height:1.4}.hint[data-state=error]{color:var(--danger)}.hint[data-state=ok]{color:#15803d}
+.field{margin-bottom:17px}.hint{min-height:1.25em;margin:6px 4px 8px;font-size:11px;color:#98a2b3;line-height:1.35}.hint[data-state=error]{color:var(--danger)}.hint[data-state=ok]{color:#15803d}
+.generate-card{margin-top:4px;padding:22px 18px 16px;border:1px solid #eef1f5;border-radius:25px;background:rgba(255,255,255,.96);box-shadow:0 18px 45px rgba(16,24,40,.07),0 3px 12px rgba(31,94,255,.035)}
+.visual-label{display:flex;align-items:center;gap:8px;margin:0 0 8px 2px;color:#344b74;font-size:13px;font-weight:800;letter-spacing:-.01em}
+.visual-label ion-icon{font-size:18px;color:#627da8}.visual-label span{color:#98a2b3;font-weight:600;margin-left:2px}
+.visual-input{--background:#f8faff;--border-color:#e3e9f2;--border-radius:17px;--highlight-color-focused:#4b7cf5;min-height:54px;box-shadow:inset 0 1px 2px rgba(16,24,40,.025)}
+.visual-input::part(native){font-size:14px;color:#667085}
+.visual-input.mid::part(native){font-family:var(--mono);font-size:18px;font-weight:700;letter-spacing:.06em}
+.generate-card .field:last-of-type{margin-bottom:18px}
+.primary-action{--background:linear-gradient(135deg,#4b8bff 0%,#315ef5 55%,#4237ee 100%) !important;--color:#fff !important;--border-color:transparent !important;--border-radius:18px;min-height:58px;margin:0;font-size:16px;font-weight:800;box-shadow:0 12px 25px rgba(49,94,245,.24),inset 0 1px 0 rgba(255,255,255,.35) !important}
+.primary-action ion-icon{font-size:19px}.feature-strip{display:grid;grid-template-columns:repeat(3,1fr);margin-top:13px;padding:10px 2px 2px;border-top:1px solid #f0f2f6}
+.feature-strip>div{display:flex;align-items:center;justify-content:center;gap:6px;min-height:30px;color:#71809a;font-size:11px;border-right:1px solid #edf0f4}
+.feature-strip>div:last-child{border-right:0}.feature-strip ion-icon{padding:6px;border-radius:50%;background:#f1f5ff;color:#4674e9;font-size:15px}
+.how-it-works{margin:28px 2px 0;padding-bottom:18px}.how-it-works h2{margin:0 0 20px;color:#14213d;font-size:20px;letter-spacing:-.03em}.step{display:flex;align-items:flex-start;gap:14px;margin:0 0 19px}.step>b{flex:0 0 38px;width:38px;height:38px;display:grid;place-items:center;border-radius:50%;background:#f5efff;color:#7337e8;font-size:15px}.step>div{padding-top:1px}.step strong{display:block;color:#17233e;font-size:13px}.step span{display:block;margin-top:3px;color:#98a2b3;font-size:11.5px;line-height:1.4}
 
 ion-input{
 --background:#fff;--color:var(--ink);--border-color:#dfe5ec;--border-radius:14px;--highlight-color-focused:var(--accent);
