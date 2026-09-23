@@ -72,13 +72,11 @@ function Shell() {
           const v = e.detail.value;
           if (v === 'generer' || v === 'historique') setView(v);
         }}>
-          <IonSegmentButton value="generer">
+          <IonSegmentButton value="generer" aria-label="Générer">
             <IonIcon icon={keyOutline} />
-            <IonLabel>Générer</IonLabel>
           </IonSegmentButton>
-          <IonSegmentButton value="historique">
+          <IonSegmentButton value="historique" aria-label="Historique">
             <IonIcon icon={timeOutline} />
-            <IonLabel>Historique{entries.length > 0 ? ` · ${entries.length}` : ''}</IonLabel>
           </IonSegmentButton>
         </IonSegment>
       </IonToolbar>
