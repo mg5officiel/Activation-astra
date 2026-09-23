@@ -7,12 +7,18 @@ import { copyText, shareMessage } from '../lib/actions';
 import { buildMessage, checkDuration, checkMid, generateActivationKey, type KeyEntry } from '../lib/keygen';
 
 const DEFAULT_HINT = '8 caractères : chiffres 0–9 et lettres a–f.';
+function localIsoDate(daysFromNow: number): string {
+  const d = new Date();
+  d.setHours(12, 0, 0, 0);
+  d.setDate(d.getDate() + daysFromNow);
+  return d.toISOString().slice(0, 10);
+}
 
 export default function Generate({ onCreated }: { onCreated: (entry: KeyEntry) => void }) {
   const [mid, setMid] = useState('');
   const [client, setClient] = useState('');
   const [secret, setSecret] = useState('');
-  const [duration, setDuration] = useState('30');
+  const [expiration, setExpiration] = useState(localIsoDate(30));
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [current, setCurrent] = useState<KeyEntry | null>(null);
   const [nonce, setNonce] = useState(0);
@@ -34,7 +40,10 @@ export default function Generate({ onCreated }: { onCreated: (entry: KeyEntry) =
 
   async function submit() {
     const c = checkMid(mid);
-    const days = Number(duration);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const expiry = new Date(expiration + 'T00:00:00');
+    const days = Math.round((expiry.getTime() - today.getTime()) / 86400000);
     if (!c.ok) {
       setSubmitError(c.state === 'empty'
         ? "Saisissez l'ID machine du client : 8 caractères, par exemple a3f7c291."
@@ -44,7 +53,8 @@ export default function Generate({ onCreated }: { onCreated: (entry: KeyEntry) =
       return;
     }
     if (!secret.trim()) { setSubmitError('Saisissez la phrase secrète de signature.'); return; }
-    if (!checkDuration(days)) { setSubmitError('La durée doit être un nombre entier compris entre 1 et 3650 jours.'); return; }
+    if (!expiration) { setSubmitError("Choisissez une date d'expiration."); return; }
+    if (!checkDuration(days)) { setSubmitError("La date d'expiration doit être comprise entre demain et 3650 jours."); return; }
 
     try {
       const out = await generateActivationKey(c.mid, secret, days);
@@ -108,20 +118,18 @@ export default function Generate({ onCreated }: { onCreated: (entry: KeyEntry) =
 
       <div className="field">
         <IonInput
-          type="number"
-          label="Durée de validité (jours)"
+          type="date"
+          label="Date d'expiration"
           labelPlacement="stacked"
           fill="outline"
-          placeholder="30"
-          value={duration}
-          min="1"
-          max="3650"
-          inputmode="numeric"
+          value={expiration}
+          min={localIsoDate(1)}
+          max={localIsoDate(3650)}
           enterkeyhint="next"
-          onIonInput={(e) => { setDuration(String(e.detail.value ?? '')); setSubmitError(null); }}
+          onIonInput={(e) => { setExpiration(String(e.detail.value ?? '')); setSubmitError(null); }}
           onKeyDown={onEnter}
         />
-        <p className="hint">Exemple : 30 = valable 30 jours à partir de la génération.</p>
+        <p className="hint">La clé sera valable jusqu'à cette date.</p>
       </div>
 
       <div className="field">
