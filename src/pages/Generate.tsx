@@ -160,13 +160,6 @@ export default function Generate({ onCreated }: { onCreated: (entry: KeyEntry) =
         </div>
       </section>
 
-      <section className="how-it-works">
-        <h2>Comment ça marche ?</h2>
-        <div className="step"><b>1</b><div><strong>Saisissez les informations</strong><span>ID machine, phrase secrète et expiration.</span></div></div>
-        <div className="step"><b>2</b><div><strong>Générez la clé</strong><span>Notre système crée une clé d'activation unique.</span></div></div>
-        <div className="step"><b>3</b><div><strong>Envoyez au client</strong><span>Partagez la clé en toute sécurité.</span></div></div>
-      </section>
-
       {current && (
         <section className="result" aria-label="Clé générée">
           <Ticket key={nonce} ref={ticketRef} entry={current} />
@@ -181,8 +174,7 @@ export default function Generate({ onCreated }: { onCreated: (entry: KeyEntry) =
           <p className="note">Valable jusqu'au {new Date(current.exp + 'T00:00:00Z').toLocaleDateString('fr-FR')} • {current.durationDays} jour{current.durationDays > 1 ? 's' : ''}</p>
         </section>
       )}
-
-      <p className="warn">La phrase secrète n'est pas enregistrée. Ne partagez pas cette application ni votre phrase secrète.</p>
+ 
     </>
   );
 }
