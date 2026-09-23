@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { IonApp, IonButton, IonButtons, IonContent, IonFooter, IonHeader, IonIcon, IonLabel, IonPage, IonSegment, IonSegmentButton, IonTitle, IonToolbar, setupIonicReact, useIonAlert } from '@ionic/react';
+import { IonApp, IonButton, IonButtons, IonContent, IonFooter, IonHeader, IonIcon, IonLabel, IonPage, IonSegment, IonSegmentButton, IonToolbar, setupIonicReact, useIonAlert } from '@ionic/react';
 import { keyOutline, timeOutline } from 'ionicons/icons';
 import Generate from './pages/Generate';
 import History from './pages/History';
@@ -48,11 +48,14 @@ function Shell() {
     <IonHeader className="app-header">
       <IonToolbar>
         <div className="brand" slot="start">
-          <div className="brand-logo"><img src="/astra-logo.svg" alt="" /></div>
+          <div className="brand-logo"><img src="/astra-logo.svg" alt="Astra Key" /></div>
           <div><span className="brand-name">Astra Key</span><span className="brand-subtitle">Activation sécurisée</span></div>
         </div>
-        <IonTitle>{view === 'generer' ? 'Nouvelle clé' : 'Historique'}</IonTitle>
-        {view === 'historique' && entries.length > 0 && <IonButtons slot="end"><IonButton className="clear-button" fill="clear" onClick={askClear}>Vider</IonButton></IonButtons>}
+        {view === 'historique' && entries.length > 0 && (
+          <IonButtons slot="end">
+            <IonButton className="clear-button" fill="clear" onClick={askClear}>Vider</IonButton>
+          </IonButtons>
+        )}
       </IonToolbar>
     </IonHeader>
 
@@ -65,9 +68,18 @@ function Shell() {
 
     <IonFooter className="glass-footer">
       <IonToolbar>
-        <IonSegment value={view} onIonChange={(e) => { const v = e.detail.value; if (v === 'generer' || v === 'historique') setView(v); }}>
-          <IonSegmentButton value="generer"><IonIcon icon={keyOutline} /><IonLabel>Générer</IonLabel></IonSegmentButton>
-          <IonSegmentButton value="historique"><IonIcon icon={timeOutline} /><IonLabel>Historique{entries.length > 0 ? ` · ${entries.length}` : ''}</IonLabel></IonSegmentButton>
+        <IonSegment value={view} onIonChange={(e) => {
+          const v = e.detail.value;
+          if (v === 'generer' || v === 'historique') setView(v);
+        }}>
+          <IonSegmentButton value="generer">
+            <IonIcon icon={keyOutline} />
+            <IonLabel>Générer</IonLabel>
+          </IonSegmentButton>
+          <IonSegmentButton value="historique">
+            <IonIcon icon={timeOutline} />
+            <IonLabel>Historique{entries.length > 0 ? ` · ${entries.length}` : ''}</IonLabel>
+          </IonSegmentButton>
         </IonSegment>
       </IonToolbar>
     </IonFooter>
