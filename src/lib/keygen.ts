@@ -1,16 +1,14 @@
-/**
- * Équivalent de votre generate.ts : même algorithme, mêmes clés.
- * (La ligne de commande, elle, n'est pas reprise : c'est l'interface qui la remplace.)
- */
 import { hmacSign } from './crypto';
 
 const CHARS = 'BCDFGHJKMNPQRTVWXY2346789';
 
 export interface KeyEntry {
   client: string;
-  mid: string; // ID machine (8 hex)
-  iat: string; // date d'émission YYYY-MM-DD (UTC)
-  key: string; // clé d'activation
+  mid: string;
+  iat: string;
+  exp: string;
+  durationDays: number;
+  key: string;
 }
 
 export type MidCheck =
@@ -18,64 +16,64 @@ export type MidCheck =
   | { ok: false; state: 'empty' | 'partial' | 'error'; msg: string; missing?: number };
 
 function toBase25(hex: string, length: number): string {
-  let num = BigInt('0x' + hex);
-  let result = '';
-  for (let i = 0; i < length; i++) {
-    result = CHARS[Number(num % BigInt(CHARS.length))] + result;
-    num /= BigInt(CHARS.length);
-  }
+  let num = BigInt('0x' + hex); let result = '';
+  for (let i = 0; i < length; i++) { result = CHARS[Number(num % BigInt(CHARS.length))] + result; num /= BigInt(CHARS.length); }
   return result.padStart(length, CHARS[0]);
 }
+function formatKey(flat: string): string { return flat.match(/.{5}/g)!.join('-'); }
 
-function formatKey(flat: string): string {
-  return flat.match(/.{5}/g)!.join('-');
-}
-
-/** Même règle que generate.ts : 8 caractères hexadécimaux, sans tenir compte de la casse. */
 export function checkMid(raw: string): MidCheck {
   const mid = raw.trim().toLowerCase();
   if (!mid) return { ok: false, state: 'empty', msg: '' };
-  if (/[^a-f0-9]/.test(mid)) {
-    return { ok: false, state: 'error', msg: 'Caractère non valide : seuls les chiffres 0–9 et les lettres a–f sont acceptés.' };
-  }
+  if (/[^a-f0-9]/.test(mid)) return { ok: false, state: 'error', msg: 'Caractère non valide : seuls les chiffres 0–9 et les lettres a–f sont acceptés.' };
   if (mid.length < 8) return { ok: false, state: 'partial', msg: `${mid.length} sur 8 caractères`, missing: 8 - mid.length };
   if (mid.length > 8) return { ok: false, state: 'error', msg: `${mid.length} caractères saisis : l'ID machine en compte 8.` };
   return { ok: true, state: 'ok', mid, msg: 'ID valide' };
 }
 
+export function checkDuration(raw: number): boolean {
+  return Number.isInteger(raw) && raw >= 1 && raw <= 3650;
+}
+
+function addDays(date: Date, days: number): Date {
+  const out = new Date(date.getTime()); out.setUTCDate(out.getUTCDate() + days); return out;
+}
+function isoDate(date: Date): string { return date.toISOString().split('T')[0]; }
+
+/**
+ * Format v2 : mid(8 hex) + expiration(8 hex YYYYMMDD) + signature(8 hex).
+ * La date d'expiration est donc présente dans la charge utile et protégée par HMAC.
+ */
 export async function generateActivationKey(
   machineId: string,
+  secret: string,
+  durationDays: number,
   now: Date = new Date(),
   forceFallback = false,
-): Promise<Pick<KeyEntry, 'key' | 'mid' | 'iat'>> {
+): Promise<Pick<KeyEntry, 'key' | 'mid' | 'iat' | 'exp' | 'durationDays'>> {
   const check = checkMid(machineId);
-  if (!check.ok) {
-    throw new Error(`ID Machine invalide : « ${machineId.trim().toLowerCase()} »\nAttendu : 8 caractères hex (ex: a3f7c291)`);
-  }
+  if (!check.ok) throw new Error(`ID Machine invalide : « ${machineId.trim().toLowerCase()} »\nAttendu : 8 caractères hex (ex: a3f7c291)`);
+  if (!secret.trim()) throw new Error('La phrase secrète est obligatoire.');
+  if (!checkDuration(durationDays)) throw new Error('La durée doit être un nombre entier de 1 à 3650 jours.');
+
   const mid = check.mid;
-  const iat = now.toISOString().split('T')[0]; // YYYY-MM-DD
-  const dataToSign = `v=1|mid=${mid}|iat=${iat}`;
-  const sig = await hmacSign(dataToSign, forceFallback);
-
-  const payload = mid + iat.replace(/-/g, '') + sig.slice(0, 8);
-  return { key: formatKey(toBase25(payload, 25)), mid, iat };
+  const iat = isoDate(now);
+  const exp = isoDate(addDays(now, durationDays));
+  const expCompact = exp.replace(/-/g, '');
+  const dataToSign = `v=2|mid=${mid}|iat=${iat}|exp=${exp}`;
+  const sig = await hmacSign(dataToSign, secret, forceFallback);
+  const payload = mid + expCompact + sig.slice(0, 8);
+  return { key: formatKey(toBase25(payload, 25)), mid, iat, exp, durationDays };
 }
 
-/* ── Présentation ─────────────────────────────────────────────────────── */
-
-export function formatDate(iat: string, month: 'long' | 'short' = 'long'): string {
-  return new Date(iat + 'T00:00:00Z').toLocaleDateString('fr-FR', {
-    timeZone: 'UTC',
-    day: 'numeric',
-    month,
-    year: 'numeric',
-  });
+export function formatDate(date: string, month: 'long' | 'short' = 'long'): string {
+  return new Date(date + 'T00:00:00Z').toLocaleDateString('fr-FR', { timeZone: 'UTC', day: 'numeric', month, year: 'numeric' });
 }
 
-export function buildMessage(key: string, client: string): string {
+export function buildMessage(key: string, client: string, exp?: string): string {
   const hello = client ? `Bonjour ${client},` : 'Bonjour,';
-  return `${hello}\n\nVoici votre clé d'activation Gestion Cyber :\n\n${key}\n\nMerci de la saisir dans l'application pour l'activer.`;
+  const validity = exp ? `\n\nValable jusqu'au ${formatDate(exp, 'long')}.` : '';
+  return `${hello}\n\nVoici votre clé d'activation Astra Key :\n\n${key}${validity}\n\nMerci de la saisir dans l'application pour l'activer.`;
 }
 
-export const whatsappLink = (message: string): string =>
-  'https://wa.me/?text=' + encodeURIComponent(message);
+export const whatsappLink = (message: string): string => 'https://wa.me/?text=' + encodeURIComponent(message);
