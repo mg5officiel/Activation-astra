@@ -1,12 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import { IonButton, IonIcon, IonInput, useIonToast } from '@ionic/react';
-import { calendarOutline, copyOutline, desktopOutline, flashOutline, lockClosedOutline, personOutline, shareSocialOutline, shieldCheckmarkOutline, sparklesOutline } from 'ionicons/icons';
+import {
+  calendarOutline, chevronDownOutline, copyOutline, desktopOutline,
+  eyeOffOutline, flashOutline, lockClosedOutline, personOutline,
+  shareSocialOutline, shieldCheckmarkOutline, sparklesOutline
+} from 'ionicons/icons';
 
 import Ticket from '../components/Ticket';
 import { copyText, shareMessage } from '../lib/actions';
 import { buildMessage, checkDuration, checkMid, generateActivationKey, type KeyEntry } from '../lib/keygen';
 
-const DEFAULT_HINT = '8 caractères : chiffres 0–9 et lettres a–f.';
+const DEFAULT_HINT = '';
 function localIsoDate(daysFromNow: number): string {
   const d = new Date();
   d.setHours(12, 0, 0, 0);
@@ -46,9 +50,9 @@ export default function Generate({ onCreated }: { onCreated: (entry: KeyEntry) =
     const days = Math.round((expiry.getTime() - today.getTime()) / 86400000);
     if (!c.ok) {
       setSubmitError(c.state === 'empty'
-        ? "Saisissez l'ID machine du client : 8 caractères, par exemple a3f7c291."
+        ? "Saisissez l'ID machine du client."
         : c.state === 'partial'
-          ? `Il manque ${c.missing} caractère${c.missing! > 1 ? 's' : ''} : l'ID machine en compte 8.`
+          ? `Il manque ${c.missing} caractère${c.missing! > 1 ? 's' : ''}.`
           : c.msg);
       return;
     }
@@ -75,88 +79,109 @@ export default function Generate({ onCreated }: { onCreated: (entry: KeyEntry) =
       <div className="screen-heading">
         <span className="eyebrow">NOUVELLE ACTIVATION</span>
         <h1>Générer une clé</h1>
-        <p>Entrez les informations ci-dessous pour générer une clé d’activation sécurisée.</p>
+        <p>Entrez les informations ci-dessous pour générer une clé d'activation sécurisée.</p>
       </div>
 
       <section className="generate-card">
+
+        {/* ID Machine */}
         <div className="field">
-          <label className="visual-label"><IonIcon icon={desktopOutline} />ID Machine</label>
-          <IonInput
-            className="visual-input mid"
-            fill="outline"
-            placeholder="Ex : a3f7c291"
-            value={mid}
-            maxlength={8}
-            autocapitalize="off"
-            autocorrect={false}
-            spellcheck={false}
-            enterkeyhint="next"
-            onIonInput={(e) => { setMid(String(e.detail.value ?? '')); setSubmitError(null); }}
-            onKeyDown={onEnter}
-          />
-          <p className="hint" data-state={hintState} aria-live="polite">{hint}</p>
+          <label className="visual-label">ID Machine</label>
+          <div className="input-wrapper">
+            <IonIcon icon={desktopOutline} />
+            <IonInput
+              className="visual-input mid"
+              placeholder="Ex: AST-2025-001234"
+              value={mid}
+              maxlength={8}
+              autocapitalize="off"
+              autocorrect={false}
+              spellcheck={false}
+              enterkeyhint="next"
+              onIonInput={(e) => { setMid(String(e.detail.value ?? '')); setSubmitError(null); }}
+              onKeyDown={onEnter}
+            />
+          </div>
+          {(hint && hintState !== 'neutral') && (
+            <p className="hint" data-state={hintState} aria-live="polite">{hint}</p>
+          )}
         </div>
 
+        {/* Phrase secrète */}
         <div className="field">
-          <label className="visual-label"><IonIcon icon={lockClosedOutline} />Phrase secrète</label>
-          <IonInput
-            className="visual-input"
-            type="password"
-            fill="outline"
-            placeholder="Entrez votre phrase secrète"
-            value={secret}
-            maxlength={200}
-            autocapitalize="off"
-            autocorrect={false}
-            spellcheck={false}
-            enterkeyhint="next"
-            onIonInput={(e) => { setSecret(String(e.detail.value ?? '')); setSubmitError(null); }}
-            onKeyDown={onEnter}
-          />
-          <p className="hint">Utilisée pour signer la clé. Elle n'est jamais enregistrée.</p>
+          <label className="visual-label">Phrase secrète</label>
+          <div className="input-wrapper">
+            <IonIcon icon={lockClosedOutline} />
+            <IonInput
+              className="visual-input"
+              type="password"
+              placeholder="Entrez la phrase secrète"
+              value={secret}
+              maxlength={200}
+              autocapitalize="off"
+              autocorrect={false}
+              spellcheck={false}
+              enterkeyhint="next"
+              onIonInput={(e) => { setSecret(String(e.detail.value ?? '')); setSubmitError(null); }}
+              onKeyDown={onEnter}
+            />
+            <button className="eye-btn" type="button" aria-label="Afficher/masquer">
+              <IonIcon icon={eyeOffOutline} />
+            </button>
+          </div>
         </div>
 
+        {/* Date d'expiration */}
         <div className="field">
-          <label className="visual-label"><IonIcon icon={calendarOutline} />Date d'expiration</label>
-          <IonInput
-            className="visual-input"
-            type="date"
-            fill="outline"
-            value={expiration}
-            min={localIsoDate(1)}
-            max={localIsoDate(3650)}
-            enterkeyhint="next"
-            onIonInput={(e) => { setExpiration(String(e.detail.value ?? '')); setSubmitError(null); }}
-            onKeyDown={onEnter}
-          />
-          <p className="hint">La durée de validité est calculée automatiquement.</p>
+          <label className="visual-label">Date d'expiration</label>
+          <div className="date-select-wrapper">
+            <IonIcon icon={calendarOutline} className="leading" />
+            <IonInput
+              className="visual-input"
+              type="date"
+              value={expiration}
+              min={localIsoDate(1)}
+              max={localIsoDate(3650)}
+              enterkeyhint="next"
+              onIonInput={(e) => { setExpiration(String(e.detail.value ?? '')); setSubmitError(null); }}
+              onKeyDown={onEnter}
+            />
+            <IonIcon icon={chevronDownOutline} className="chevron" />
+          </div>
+          <p className="hint">La durée de la clé sera calculée automatiquement.</p>
         </div>
 
+        {/* Nom du client */}
         <div className="field">
-          <label className="visual-label"><IonIcon icon={personOutline} />Nom du client <span>(facultatif)</span></label>
-          <IonInput
-            className="visual-input"
-            fill="outline"
-            placeholder="Entrez le nom du client"
-            value={client}
-            maxlength={60}
-            enterkeyhint="go"
-            onIonInput={(e) => setClient(String(e.detail.value ?? ''))}
-            onKeyDown={onEnter}
-          />
-          <p className="hint">Apparaît dans l'historique et le message envoyé.</p>
+          <label className="visual-label">
+            Nom du client <span>(optionnel)</span>
+          </label>
+          <div className="input-wrapper">
+            <IonIcon icon={personOutline} />
+            <IonInput
+              className="visual-input"
+              placeholder="Entrez le nom du client"
+              value={client}
+              maxlength={60}
+              enterkeyhint="go"
+              onIonInput={(e) => setClient(String(e.detail.value ?? ''))}
+              onKeyDown={onEnter}
+            />
+          </div>
         </div>
 
+        {/* CTA */}
         <IonButton className="primary-action" expand="block" size="large" onClick={() => void submit()}>
           <IonIcon slot="start" icon={sparklesOutline} />
           Générer la clé
-          <IonIcon slot="end" icon={shareSocialOutline} style={{visibility:'hidden'}} />
+          <span slot="end" style={{opacity:0, fontSize:'0px'}}>›</span>
         </IonButton>
 
+        {/* Feature strip */}
         <div className="feature-strip" aria-label="Avantages">
-          <div><IonIcon icon={shieldCheckmarkOutline}/><span>Sécurisé</span></div>
-          <div><IonIcon icon={flashOutline}/><span>Rapide</span></div>
-          <div><IonIcon icon={lockClosedOutline}/><span>Fiable</span></div>
+          <div><IonIcon icon={shieldCheckmarkOutline} /><span>Sécurisé</span></div>
+          <div><IonIcon icon={flashOutline} /><span>Rapide</span></div>
+          <div><IonIcon icon={lockClosedOutline} /><span>Fiable</span></div>
         </div>
       </section>
 
@@ -164,17 +189,20 @@ export default function Generate({ onCreated }: { onCreated: (entry: KeyEntry) =
         <section className="result" aria-label="Clé générée">
           <Ticket key={nonce} ref={ticketRef} entry={current} />
           <div className="actions">
-            <IonButton className="secondary-action" expand="block" onClick={async () => notify((await copyText(current.key)) ? 'Clé copiée' : 'Copie impossible')}>
+            <IonButton className="secondary-action" expand="block"
+              onClick={async () => notify((await copyText(current.key)) ? 'Clé copiée' : 'Copie impossible')}>
               <IonIcon slot="start" icon={copyOutline} />Copier la clé
             </IonButton>
-            <IonButton className="secondary-action" expand="block" fill="outline" onClick={() => void shareMessage(buildMessage(current.key, current.client, current.exp))}>
+            <IonButton className="secondary-action" expand="block" fill="outline"
+              onClick={() => void shareMessage(buildMessage(current.key, current.client, current.exp))}>
               <IonIcon slot="start" icon={shareSocialOutline} />Envoyer au client
             </IonButton>
           </div>
-          <p className="note">Valable jusqu'au {new Date(current.exp + 'T00:00:00Z').toLocaleDateString('fr-FR')} • {current.durationDays} jour{current.durationDays > 1 ? 's' : ''}</p>
+          <p className="note">
+            Valable jusqu'au {new Date(current.exp + 'T00:00:00Z').toLocaleDateString('fr-FR')} • {current.durationDays} jour{current.durationDays > 1 ? 's' : ''}
+          </p>
         </section>
       )}
- 
     </>
   );
 }
