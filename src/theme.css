@@ -1,6 +1,6 @@
 /* ── Tokens ── */
 :root {
-  --page: #f0f2ff;
+  --page: #eef0fb;
   --surface: #ffffff;
   --surface-soft: #f5f7ff;
   --ink: #0f1d3a;
@@ -206,7 +206,7 @@ ion-item-option { text-transform: none; font-weight: 700; }
 
 /* ── Primary CTA ── */
 .primary-action {
-  --background: linear-gradient(135deg, #4b8bff 0%, #2459f5 55%, #1a3ef0 100%) !important;
+  --background: linear-gradient(90deg, #5b8fff 0%, #2557f5 50%, #1a3ef0 100%) !important;
   --color: #fff !important;
   --border-color: transparent !important;
   --border-radius: 20px;
@@ -217,6 +217,11 @@ ion-item-option { text-transform: none; font-weight: 700; }
   letter-spacing: -.01em;
 }
 .primary-action ion-icon { font-size: 20px; }
+.cta-arrow { font-size: 20px; font-weight: 400; line-height: 1; }
+
+/* Date field — affichage texte */
+.date-display { flex: 1; font-size: 14px; color: #9aaac4; cursor: pointer; user-select: none; }
+.date-display--set { color: #1a2a50; }
 
 /* ── Feature strip ── */
 .feature-strip {
@@ -323,21 +328,31 @@ ion-item-option { text-transform: none; font-weight: 700; }
 }
 .glass-footer ion-segment-button {
   --background: transparent;
-  --background-checked: #f0eaff;
+  --background-checked: transparent;
   --color: #9aaac4;
   --color-checked: #7b2ff7;
   --indicator-color: transparent;
   --border-radius: 20px;
-  min-height: 48px;
-  margin: 0 2px;
-  padding: 0 8px;
+  min-height: 56px;
+  margin: 0;
+  padding: 0;
   text-transform: none;
   font-weight: 700;
   letter-spacing: -.01em;
 }
-.glass-footer ion-segment-button ion-icon { font-size: 22px; margin-bottom: 0; }
+.glass-footer ion-segment-button ion-icon {
+  font-size: 22px;
+  margin-bottom: 0;
+  padding: 10px;
+  border-radius: 50%;
+  transition: background .18s ease;
+}
+.glass-footer ion-segment-button.segment-button-checked ion-icon {
+  background: #ede8ff;
+  color: #7b2ff7;
+}
 .glass-footer ion-segment-button ion-label { font-size: 11px; font-weight: 800; }
-.glass-footer ion-segment-button::part(native) { border-radius: 20px; transition: background .18s ease, color .18s ease; }
+.glass-footer ion-segment-button::part(native) { border-radius: 20px; transition: background .18s ease; }
 .glass-footer ion-segment-button::part(indicator) { display: none; }
 
 ion-input { --background: transparent; --color: var(--ink); --border-color: transparent; --border-radius: 0; --highlight-color-focused: transparent; --padding-start: 0; --padding-end: 0; min-height: 54px; font-size: 14px; box-shadow: none; }
