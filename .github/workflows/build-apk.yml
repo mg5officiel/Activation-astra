@@ -36,6 +36,19 @@ jobs:
       - name: Sync Capacitor Android
         run: npx cap sync android
 
+      - name: Reduce Android launcher icon zoom
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y imagemagick
+          for dir in android/app/src/main/res/mipmap-mdpi android/app/src/main/res/mipmap-hdpi android/app/src/main/res/mipmap-xhdpi android/app/src/main/res/mipmap-xxhdpi android/app/src/main/res/mipmap-xxxhdpi; do
+            for file in "$dir/ic_launcher.png" "$dir/ic_launcher_round.png" "$dir/ic_launcher_foreground.png"; do
+              if [ -f "$file" ]; then
+                size=$(identify -format '%wx%h' "$file")
+                magick "$file" -alpha on -fuzz 8% -transparent white -trim +repage -resize 55% -gravity center -background none -extent "$size" "$file"
+              fi
+            done
+          done
+
       - name: Make Gradle executable
         run: chmod +x android/gradlew
 
