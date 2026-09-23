@@ -62,7 +62,11 @@ export default function Generate({ onCreated }: { onCreated: (entry: KeyEntry) =
 
   return (
     <>
-      <p className="lede">Renseignez l'ID machine, la phrase secrète et la durée de validité, puis générez la clé.</p>
+      <div className="screen-heading">
+        <span className="eyebrow">NOUVELLE ACTIVATION</span>
+        <h1>Générer une clé</h1>
+        <p>Créez une clé d’activation en quelques secondes.</p>
+      </div>
 
       <div className="field">
         <IonInput
