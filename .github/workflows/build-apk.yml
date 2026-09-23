@@ -44,7 +44,7 @@ jobs:
             for file in "$dir/ic_launcher.png" "$dir/ic_launcher_round.png" "$dir/ic_launcher_foreground.png"; do
               if [ -f "$file" ]; then
                 size=$(identify -format '%wx%h' "$file")
-                magick "$file" -alpha on -fuzz 8% -transparent white -trim +repage -resize 55% -gravity center -background none -extent "$size" "$file"
+                convert "$file" -alpha on -fuzz 8% -transparent white -trim +repage -resize 55% -gravity center -background none -extent "$size" "$file"
               fi
             done
           done
