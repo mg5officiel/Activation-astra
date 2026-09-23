@@ -139,7 +139,7 @@ export default function Generate({ onCreated }: { onCreated: (entry: KeyEntry) =
         <p className="hint">Apparaît dans le message envoyé et dans l'historique.</p>
       </div>
 
-      <IonButton expand="block" size="large" onClick={() => void submit()}>
+      <IonButton className="primary-action" expand="block" size="large" onClick={() => void submit()}>
         Générer la clé
       </IonButton>
 
@@ -147,10 +147,10 @@ export default function Generate({ onCreated }: { onCreated: (entry: KeyEntry) =
         <section className="result" aria-label="Clé générée">
           <Ticket key={nonce} ref={ticketRef} entry={current} />
           <div className="actions">
-            <IonButton expand="block" onClick={async () => notify((await copyText(current.key)) ? 'Clé copiée' : 'Copie impossible')}>
+            <IonButton className="secondary-action" expand="block" onClick={async () => notify((await copyText(current.key)) ? 'Clé copiée' : 'Copie impossible')}>
               <IonIcon slot="start" icon={copyOutline} />Copier la clé
             </IonButton>
-            <IonButton expand="block" fill="outline" onClick={() => void shareMessage(buildMessage(current.key, current.client, current.exp))}>
+            <IonButton className="secondary-action" expand="block" fill="outline" onClick={() => void shareMessage(buildMessage(current.key, current.client, current.exp))}>
               <IonIcon slot="start" icon={shareSocialOutline} />Envoyer au client
             </IonButton>
           </div>
