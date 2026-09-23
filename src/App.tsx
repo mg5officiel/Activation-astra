@@ -1,5 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
-import { IonApp, IonButton, IonButtons, IonContent, IonFooter, IonHeader, IonIcon, IonPage, IonSegment, IonSegmentButton, IonToolbar, setupIonicReact, useIonAlert } from '@ionic/react';
+import {
+  IonApp, IonButton, IonButtons, IonContent, IonFooter,
+  IonHeader, IonIcon, IonPage, IonSegment, IonSegmentButton,
+  IonToolbar, setupIonicReact, useIonAlert
+} from '@ionic/react';
 import { keyOutline, personOutline, timeOutline } from 'ionicons/icons';
 import Generate from './pages/Generate';
 import History from './pages/History';
@@ -16,7 +20,9 @@ function Shell() {
   const [presentAlert] = useIonAlert();
 
   useEffect(() => {
-    void loadHistory().then((saved) => setEntries((prev) => [...prev, ...saved.filter((s) => !prev.some((p) => sameEntry(p, s)))]));
+    void loadHistory().then((saved) =>
+      setEntries((prev) => [...prev, ...saved.filter((s) => !prev.some((p) => sameEntry(p, s)))])
+    );
   }, []);
 
   const addEntry = useCallback((entry: KeyEntry) => {
@@ -36,7 +42,7 @@ function Shell() {
   }, []);
 
   const askClear = () => presentAlert({
-    header: 'Vider l’historique ?',
+    header: 'Vider l\u2019historique\u00a0?',
     message: 'Toutes les clés générées seront effacées de cet appareil.',
     buttons: [
       { text: 'Annuler', role: 'cancel' },
@@ -44,48 +50,69 @@ function Shell() {
     ]
   });
 
-  return <IonPage>
-    <IonHeader className="app-header">
-      <IonToolbar>
-        <div className="brand" slot="start">
-          <div className="brand-logo"><img src="/astra-logo.svg" alt="Astra Key" /></div>
-          <div><span className="brand-name">Astra Key</span><span className="brand-subtitle">Activation sécurisée</span></div>
+  return (
+    <IonPage>
+      {/* ── Header ── */}
+      <IonHeader className="app-header">
+        <IonToolbar>
+          <div className="brand" slot="start">
+            <div className="brand-logo">
+              <img src="/astra-logo.svg" alt="Astra Key" />
+            </div>
+            <div>
+              <span className="brand-name">Astra Key</span>
+              <span className="brand-subtitle">Activation sécurisée</span>
+            </div>
+          </div>
+          <IonButtons slot="end">
+            {view === 'historique' && entries.length > 0 ? (
+              <IonButton className="clear-button" fill="clear" onClick={askClear}>Vider</IonButton>
+            ) : (
+              <IonButton className="profile-button" fill="clear" aria-label="Profil">
+                <IonIcon icon={personOutline} />
+              </IonButton>
+            )}
+          </IonButtons>
+        </IonToolbar>
+      </IonHeader>
+
+      {/* ── Content ── */}
+      <IonContent fullscreen>
+        <div className="sheet">
+          <div hidden={view !== 'generer'}><Generate onCreated={addEntry} /></div>
+          <div hidden={view !== 'historique'}><History entries={entries} onRemove={removeEntry} /></div>
         </div>
-        <IonButtons slot="end">
-          {view === 'historique' && entries.length > 0 ? (
-            <IonButton className="clear-button" fill="clear" onClick={askClear}>Vider</IonButton>
-          ) : (
-            <IonButton className="profile-button" fill="clear" aria-label="Profil">
-              <IonIcon icon={personOutline} />
-            </IonButton>
-          )}
-        </IonButtons>
-      </IonToolbar>
-    </IonHeader>
 
-    <IonContent fullscreen>
-      <div className="sheet">
-        <div hidden={view !== 'generer'}><Generate onCreated={addEntry} /></div>
-        <div hidden={view !== 'historique'}><History entries={entries} onRemove={removeEntry} /></div>
-      </div>
-    </IonContent>
+        {/* Watermark logo bas-droite */}
+        <img
+          src="/astra-logo.svg"
+          className="astra-watermark"
+          aria-hidden="true"
+          alt=""
+        />
+      </IonContent>
 
-    <IonFooter className="glass-footer">
-      <IonToolbar>
-        <IonSegment value={view} onIonChange={(e) => {
-          const v = e.detail.value;
-          if (v === 'generer' || v === 'historique') setView(v);
-        }}>
-          <IonSegmentButton value="generer" aria-label="Générer">
-            <IonIcon icon={keyOutline} />
-          </IonSegmentButton>
-          <IonSegmentButton value="historique" aria-label="Historique">
-            <IonIcon icon={timeOutline} />
-          </IonSegmentButton>
-        </IonSegment>
-      </IonToolbar>
-    </IonFooter>
-  </IonPage>;
+      {/* ── Tab bar ── */}
+      <IonFooter className="glass-footer">
+        <IonToolbar>
+          <IonSegment
+            value={view}
+            onIonChange={(e) => {
+              const v = e.detail.value;
+              if (v === 'generer' || v === 'historique') setView(v);
+            }}
+          >
+            <IonSegmentButton value="generer" aria-label="Générer">
+              <IonIcon icon={keyOutline} />
+            </IonSegmentButton>
+            <IonSegmentButton value="historique" aria-label="Historique">
+              <IonIcon icon={timeOutline} />
+            </IonSegmentButton>
+          </IonSegment>
+        </IonToolbar>
+      </IonFooter>
+    </IonPage>
+  );
 }
 
 export default function App() { return <IonApp><Shell /></IonApp>; }
