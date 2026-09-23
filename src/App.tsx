@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { IonApp, IonButton, IonButtons, IonContent, IonFooter, IonHeader, IonIcon, IonPage, IonSegment, IonSegmentButton, IonToolbar, setupIonicReact, useIonAlert } from '@ionic/react';
-import { keyOutline, timeOutline } from 'ionicons/icons';
+import { keyOutline, personOutline, timeOutline } from 'ionicons/icons';
 import Generate from './pages/Generate';
 import History from './pages/History';
 import { loadHistory, saveHistory } from './lib/history';
@@ -51,11 +51,15 @@ function Shell() {
           <div className="brand-logo"><img src="/astra-logo.svg" alt="Astra Key" /></div>
           <div><span className="brand-name">Astra Key</span><span className="brand-subtitle">Activation sécurisée</span></div>
         </div>
-        {view === 'historique' && entries.length > 0 && (
-          <IonButtons slot="end">
+        <IonButtons slot="end">
+          {view === 'historique' && entries.length > 0 ? (
             <IonButton className="clear-button" fill="clear" onClick={askClear}>Vider</IonButton>
-          </IonButtons>
-        )}
+          ) : (
+            <IonButton className="profile-button" fill="clear" aria-label="Profil">
+              <IonIcon icon={personOutline} />
+            </IonButton>
+          )}
+        </IonButtons>
       </IonToolbar>
     </IonHeader>
 
