@@ -134,7 +134,7 @@ export default function Generate({ onCreated }: { onCreated: (entry: KeyEntry) =
         {/* Date d'expiration */}
         <div className="field">
           <label className="visual-label">Date d'expiration</label>
-          <div className="date-select-wrapper" onClick={() => document.getElementById('date-picker')?.showPicker()}>
+          <div className="date-select-wrapper" onClick={() => (document.getElementById('date-picker') as HTMLInputElement | null)?.showPicker?.()}>
             <IonIcon icon={calendarOutline} className="leading" />
             <span className={`date-display ${expiration ? 'date-display--set' : ''}`}>
               {expiration
