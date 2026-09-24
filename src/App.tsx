@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
-  IonApp, IonButton, IonButtons, IonContent, IonFooter,
-  IonHeader, IonIcon, IonPage, IonSegment, IonSegmentButton,
+  IonApp, IonButton, IonButtons, IonContent,
+  IonHeader, IonIcon, IonPage,
   IonToolbar, setupIonicReact, useIonAlert
 } from '@ionic/react';
 import { keyOutline, personOutline, timeOutline } from 'ionicons/icons';
@@ -14,10 +14,25 @@ setupIonicReact({ mode: 'md' });
 type View = 'generer' | 'historique';
 const sameEntry = (a: KeyEntry, b: KeyEntry) => a.mid === b.mid && a.iat === b.iat && a.exp === b.exp;
 
+function useKeyboardOpen() {
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    const vv = window.visualViewport;
+    if (!vv) return;
+    const threshold = 120; // px de réduction de hauteur = clavier probablement ouvert
+    const baseline = window.innerHeight;
+    const onResize = () => setOpen(baseline - vv.height > threshold);
+    vv.addEventListener('resize', onResize);
+    return () => vv.removeEventListener('resize', onResize);
+  }, []);
+  return open;
+}
+
 function Shell() {
   const [view, setView] = useState<View>('generer');
   const [entries, setEntries] = useState<KeyEntry[]>([]);
   const [presentAlert] = useIonAlert();
+  const keyboardOpen = useKeyboardOpen();
 
   useEffect(() => {
     void loadHistory().then((saved) =>
@@ -93,26 +108,35 @@ function Shell() {
       </IonContent>
 
       {/* ── Tab bar ── */}
-      <IonFooter className="glass-footer">
-        <IonToolbar>
-          <IonSegment
-            value={view}
-            onIonChange={(e) => {
-              const v = e.detail.value;
-              if (v === 'generer' || v === 'historique') setView(v);
-            }}
-          >
-            <IonSegmentButton value="generer" aria-label="Générer">
+      {!keyboardOpen && (
+        <footer className="glass-footer">
+          <div className="tab-pill" role="tablist">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={view === 'generer'}
+              aria-label="Générer"
+              className={`tab-btn ${view === 'generer' ? 'tab-btn--active' : ''}`}
+              onClick={() => setView('generer')}
+            >
               <IonIcon icon={keyOutline} />
-            </IonSegmentButton>
-            <IonSegmentButton value="historique" aria-label="Historique">
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={view === 'historique'}
+              aria-label="Historique"
+              className={`tab-btn ${view === 'historique' ? 'tab-btn--active' : ''}`}
+              onClick={() => setView('historique')}
+            >
               <IonIcon icon={timeOutline} />
-            </IonSegmentButton>
-          </IonSegment>
-        </IonToolbar>
-      </IonFooter>
+            </button>
+          </div>
+        </footer>
+      )}
     </IonPage>
   );
 }
 
 export default function App() { return <IonApp><Shell /></IonApp>; }
+ 
