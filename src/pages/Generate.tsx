@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { IonButton, IonIcon, useIonToast } from '@ionic/react';
 import {
   calendarOutline, chevronDownOutline, copyOutline, downloadOutline, desktopOutline,
@@ -6,7 +6,7 @@ import {
   shareSocialOutline, sparklesOutline
 } from 'ionicons/icons';
 
-import Ticket from '../components/Ticket';
+import TicketModal from '../components/TicketModal';
 import { copyText } from '../lib/actions';
 import { checkDuration, checkMid, generateActivationKey, type KeyEntry } from '../lib/keygen';
 import { saveTicketJpg, shareTicketJpg } from '../lib/ticketImage';
@@ -26,8 +26,7 @@ export default function Generate({ onCreated }: { onCreated: (entry: KeyEntry) =
   const [expiration, setExpiration] = useState('');
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [current, setCurrent] = useState<KeyEntry | null>(null);
-  const [nonce, setNonce] = useState(0);
-  const ticketRef = useRef<HTMLDivElement>(null);
+  const [ticketOpen, setTicketOpen] = useState(false);
   const [toast] = useIonToast();
   const notify = (message: string) => toast({ message, duration: 1600, position: 'top' });
 
@@ -38,10 +37,6 @@ export default function Generate({ onCreated }: { onCreated: (entry: KeyEntry) =
   else if (check.state === 'error') { hint = check.msg; hintState = 'error'; }
   else if (check.state === 'ok') { hint = check.msg; hintState = 'ok'; }
   else if (check.state === 'partial') { hint = check.msg; }
-
-  useEffect(() => {
-    if (nonce > 0) ticketRef.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-  }, [nonce]);
 
   async function submit() {
     const c = checkMid(mid);
@@ -66,7 +61,7 @@ export default function Generate({ onCreated }: { onCreated: (entry: KeyEntry) =
       const entry: KeyEntry = { client: client.trim(), ...out };
       onCreated(entry);
       setCurrent(entry);
-      setNonce((n) => n + 1);
+      setTicketOpen(true);
       (document.activeElement as HTMLElement | null)?.blur();
     } catch (err) {
       setSubmitError('La génération a échoué : ' + (err as Error).message);
@@ -177,13 +172,11 @@ export default function Generate({ onCreated }: { onCreated: (entry: KeyEntry) =
         <IonButton className="primary-action" expand="block" size="large" onClick={() => void submit()}>
           <IonIcon slot="start" icon={sparklesOutline} />
           Générer la clé
-          <span slot="end" className="cta-arrow">→</span>
         </IonButton>
       </section>
 
-      {current && (
-        <section className="result" aria-label="Clé générée">
-          <Ticket key={nonce} ref={ticketRef} entry={current} />
+      <TicketModal isOpen={ticketOpen} entry={current} onClose={() => setTicketOpen(false)}>
+        {current && (
           <div className="actions">
             <IonButton className="secondary-action" expand="block"
               onClick={async () => notify((await copyText(current.key)) ? 'Clé copiée' : 'Copie impossible')}>
@@ -197,12 +190,12 @@ export default function Generate({ onCreated }: { onCreated: (entry: KeyEntry) =
               onClick={async () => { try { await shareTicketJpg(current); } catch { notify("Partage annulé"); } }}>
               <IonIcon slot="start" icon={shareSocialOutline} />Partager en JPG
             </IonButton>
+            <p className="note">
+              Valable jusqu'au {new Date(current.exp + 'T00:00:00Z').toLocaleDateString('fr-FR')} • {current.durationDays} jour{current.durationDays > 1 ? 's' : ''}
+            </p>
           </div>
-          <p className="note">
-            Valable jusqu'au {new Date(current.exp + 'T00:00:00Z').toLocaleDateString('fr-FR')} • {current.durationDays} jour{current.durationDays > 1 ? 's' : ''}
-          </p>
-        </section>
-      )}
+        )}
+      </TicketModal>
     </>
   );
 }
