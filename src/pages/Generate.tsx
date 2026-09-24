@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { IonButton, IonIcon, useIonToast } from '@ionic/react';
 import {
-  calendarOutline, chevronDownOutline, copyOutline, desktopOutline,
+  calendarOutline, chevronDownOutline, copyOutline, downloadOutline, desktopOutline,
   eyeOffOutline, lockClosedOutline, personOutline,
   shareSocialOutline, sparklesOutline
 } from 'ionicons/icons';
 
 import Ticket from '../components/Ticket';
-import { copyText, shareMessage } from '../lib/actions';
-import { buildMessage, checkDuration, checkMid, generateActivationKey, type KeyEntry } from '../lib/keygen';
+import { copyText } from '../lib/actions';
+import { checkDuration, checkMid, generateActivationKey, type KeyEntry } from '../lib/keygen';
+import { saveTicketJpg, shareTicketJpg } from '../lib/ticketImage';
 
 const DEFAULT_HINT = '';
 function localIsoDate(daysFromNow: number): string {
@@ -188,9 +189,13 @@ export default function Generate({ onCreated }: { onCreated: (entry: KeyEntry) =
               onClick={async () => notify((await copyText(current.key)) ? 'Clé copiée' : 'Copie impossible')}>
               <IonIcon slot="start" icon={copyOutline} />Copier la clé
             </IonButton>
+            <IonButton className="secondary-action" expand="block"
+              onClick={async () => { try { await saveTicketJpg(current); notify('Ticket JPG enregistré'); } catch { notify("Enregistrement impossible"); } }}>
+              <IonIcon slot="start" icon={downloadOutline} />Enregistrer JPG
+            </IonButton>
             <IonButton className="secondary-action" expand="block" fill="outline"
-              onClick={() => void shareMessage(buildMessage(current.key, current.client, current.exp))}>
-              <IonIcon slot="start" icon={shareSocialOutline} />Envoyer au client
+              onClick={async () => { try { await shareTicketJpg(current); } catch { notify("Partage annulé"); } }}>
+              <IonIcon slot="start" icon={shareSocialOutline} />Partager en JPG
             </IonButton>
           </div>
           <p className="note">
