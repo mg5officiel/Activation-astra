@@ -391,9 +391,9 @@ ion-button:not(.clear-button):active { transform: scale(.985); }
   max-height: 92vh;
   overflow: auto;
   box-sizing: border-box;
-  padding: 18px 16px calc(20px + env(safe-area-inset-bottom));
+  padding: 26px 16px calc(20px + env(safe-area-inset-bottom));
   background: #fff;
-  border-radius: 28px 28px 0 0;
+  border-radius: 42px 42px 0 0;
   box-shadow: 0 -12px 40px rgba(16,24,80,.18);
   animation: ticket-modal-in .24s cubic-bezier(.2,.8,.2,1) both;
 }
