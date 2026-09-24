@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { IonButton, IonIcon, useIonToast } from '@ionic/react';
 import {
-  calendarOutline, chevronDownOutline, copyOutline, downloadOutline, desktopOutline,
-  eyeOffOutline, lockClosedOutline, personOutline,
+  calendarOutline, chevronDownOutline, copyOutline, downloadOutline, desktopOutline, lockClosedOutline, personOutline,
   shareSocialOutline, sparklesOutline
 } from 'ionicons/icons';
 
@@ -119,9 +118,6 @@ export default function Generate({ onCreated }: { onCreated: (entry: KeyEntry) =
               onChange={(e) => { setSecret(e.target.value); setSubmitError(null); }}
               onKeyDown={onEnter}
             />
-            <button className="eye-btn" type="button" aria-label="Afficher/masquer">
-              <IonIcon icon={eyeOffOutline} />
-            </button>
           </div>
         </div>
 
