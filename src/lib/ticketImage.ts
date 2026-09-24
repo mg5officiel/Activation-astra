@@ -45,22 +45,27 @@ export async function createTicketJpg(entry: KeyEntry): Promise<string> {
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error('Canvas indisponible');
 
-  ctx.fillStyle = '#f7f9fc';
+  // Le JPG reprend la carte blanche arrondie visible dans le ticket résultat.
+  // Les marges extérieures restent blanches pour conserver les coins arrondis sur un format JPG.
+  ctx.fillStyle = '#ffffff';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  const x = 70, y = 60, w = 940, h = 1230;
+  const x = 34, y = 34, w = 1012, h = 1282;
   ctx.save();
   ctx.shadowColor = 'rgba(20,35,65,.12)';
   ctx.shadowBlur = 38;
   ctx.shadowOffsetY = 14;
-  roundedRect(ctx, x, y, w, h, 34);
+  roundedRect(ctx, x, y, w, h, 48);
   ctx.fillStyle = '#ffffff';
   ctx.fill();
   ctx.restore();
 
+  ctx.save();
+  roundedRect(ctx, x, y, w, h, 48);
+  ctx.clip();
   ctx.fillStyle = '#4b7ff6';
-  roundedRect(ctx, x, y, w, 12, 6);
-  ctx.fill();
+  ctx.fillRect(x, y, w, 12);
+  ctx.restore();
 
   await drawLogo(ctx, x + 54, y + 45, 76);
 
