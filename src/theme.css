@@ -210,7 +210,6 @@ ion-item-option { text-transform: none; font-weight: 700; }
 	box-shadow: 0 10px 28px rgba(36,89,245,.32), inset 0 1px 0 rgba(255,255,255,.3);
 }
 .primary-action ion-icon { font-size: 20px; }
-.cta-arrow { font-size: 20px; font-weight: 400; line-height: 1; }
 
 /* Date field — affichage texte */
 .date-display { flex: 1; font-size: 14px; color: #9aaac4; cursor: pointer; user-select: none; }
@@ -362,4 +361,82 @@ ion-button:not(.clear-button):active { transform: scale(.985); }
 @media (prefers-reduced-motion: reduce) { .ticket.print { animation: none; } }
 @media (min-width: 600px) {
 	.sheet { max-width: 560px; margin: 0 auto; padding-left: 26px; padding-right: 26px; }
+}
+
+
+/* ── Ticket result modal ── */
+.ticket-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.ticket-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 0;
+  background: rgba(10, 20, 45, .42);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+.ticket-modal-panel {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 560px);
+  max-height: 92vh;
+  overflow: auto;
+  box-sizing: border-box;
+  padding: 18px 16px calc(20px + env(safe-area-inset-bottom));
+  background: #fff;
+  border-radius: 28px 28px 0 0;
+  box-shadow: 0 -12px 40px rgba(16,24,80,.18);
+  animation: ticket-modal-in .24s cubic-bezier(.2,.8,.2,1) both;
+}
+.ticket-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.ticket-modal-kicker {
+  display: block;
+  color: #6b28e0;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .13em;
+}
+.ticket-modal-header h2 {
+  margin: 3px 0 0;
+  color: #0c1a36;
+  font-size: 21px;
+  line-height: 1.1;
+  letter-spacing: -.04em;
+}
+.ticket-modal-close {
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid #e5eaf1;
+  border-radius: 50%;
+  background: #f7f8fc;
+  color: #475467;
+  font-size: 20px;
+}
+.ticket-modal-content .result { margin-top: 0; }
+.ticket-modal-content .actions { margin-top: 14px; }
+@keyframes ticket-modal-in {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ticket-modal-panel { animation: none; }
 }
