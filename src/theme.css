@@ -145,27 +145,25 @@ ion-item-option { text-transform: none; font-weight: 700; }
   flex-shrink: 0;
 }
 
-/* Override Ionic input styles inside wrapper */
+/* Native <input> inside wrapper — no shadow DOM, no extra inner border */
 .visual-input {
-  --background: transparent;
-  --border-color: transparent;
-  --border-radius: 0;
-  --highlight-color-focused: transparent;
-  --box-shadow: none;
-  --padding-start: 0;
-  --padding-end: 0;
-  min-height: 54px;
   flex: 1;
-}
-.visual-input::part(native) {
-  font-size: 14px; color: #667085;
+  min-width: 0;
   background: transparent;
-  box-shadow: none;
   border: none;
+  outline: none;
+  box-shadow: none;
   padding: 0;
+  margin: 0;
+  font-family: inherit;
+  font-size: 14px;
+  color: #667085;
+  min-height: 54px;
+  -webkit-appearance: none;
+  appearance: none;
 }
-.visual-input::part(container) { border: none; box-shadow: none; }
-.visual-input.mid::part(native) {
+.visual-input::placeholder { color: #9aaac4; opacity: 1; }
+.visual-input.mid {
   font-family: var(--mono);
   font-size: 16px; font-weight: 700;
   letter-spacing: .06em;
@@ -199,10 +197,6 @@ ion-item-option { text-transform: none; font-weight: 700; }
 }
 .date-select-wrapper ion-icon.leading { font-size: 20px; color: #9aaac4; }
 .date-select-wrapper ion-icon.chevron { font-size: 18px; color: #9aaac4; margin-left: auto; }
-.date-select-wrapper .visual-input {
-  --padding-start: 0;
-  min-height: 54px;
-}
 
 /* ── Primary CTA ── */
 .primary-action {
@@ -355,7 +349,6 @@ ion-item-option { text-transform: none; font-weight: 700; }
 .glass-footer ion-segment-button::part(native) { border-radius: 20px; transition: background .18s ease; }
 .glass-footer ion-segment-button::part(indicator) { display: none; }
 
-ion-input { --background: transparent; --color: var(--ink); --border-color: transparent; --border-radius: 0; --highlight-color-focused: transparent; --padding-start: 0; --padding-end: 0; min-height: 54px; font-size: 14px; box-shadow: none; }
 ion-button:not(.clear-button):not(.primary-action):not(.secondary-action) { --background: #f0f4ff; --color: var(--accent); --border-color: #d0daff; --border-width: 1px; --border-style: solid; box-shadow: 0 2px 8px rgba(16,24,80,.06); transition: transform .18s ease; }
 ion-button:not(.clear-button):active { transform: scale(.985); }
 
