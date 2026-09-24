@@ -112,7 +112,7 @@ export default function Generate({ onCreated }: { onCreated: (entry: KeyEntry) =
             <IonIcon icon={lockClosedOutline} />
             <input
               className="visual-input"
-              type="password"
+              type="text"
               placeholder="Entrez la phrase secrète"
               value={secret}
               maxLength={200}
