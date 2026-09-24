@@ -200,15 +200,21 @@ ion-item-option { text-transform: none; font-weight: 700; }
 
 /* ── Primary CTA ── */
 .primary-action {
-  --background: linear-gradient(90deg, #5b8fff 0%, #2557f5 50%, #1a3ef0 100%) !important;
-  --color: #fff !important;
-  --border-color: transparent !important;
-  --border-radius: 18px;
-  min-height: 58px;
+  --background: transparent;
+  --box-shadow: none;
   margin: 4px 0 0;
+  background: transparent;
+  box-shadow: none;
+}
+.primary-action::part(native) {
+  background: linear-gradient(90deg, #5b8fff 0%, #2557f5 50%, #1a3ef0 100%);
+  color: #fff;
+  border: none;
+  border-radius: 18px;
+  min-height: 58px;
   font-size: 16px; font-weight: 800;
-  box-shadow: 0 10px 28px rgba(36,89,245,.32), inset 0 1px 0 rgba(255,255,255,.3) !important;
   letter-spacing: -.01em;
+  box-shadow: 0 10px 28px rgba(36,89,245,.32), inset 0 1px 0 rgba(255,255,255,.3);
 }
 .primary-action ion-icon { font-size: 20px; }
 .cta-arrow { font-size: 20px; font-weight: 400; line-height: 1; }
@@ -309,15 +315,40 @@ ion-item-option { text-transform: none; font-weight: 700; }
 .warn { margin: 28px 2px 0; padding: 13px 14px; color: #667085; background: #f8fafc; border: 1px solid #edf0f4; border-radius: 13px; font-size: 11.5px; line-height: 1.5; text-align: center; }
 
 /* ── Bottom Tab Bar ── */
-.glass-footer { --background: transparent; background: transparent; padding: 0 28px calc(8px + env(safe-area-inset-bottom)); border: 0; pointer-events: none; }
-.glass-footer ion-toolbar { --background: transparent; --border-width: 0; min-height: 34px; padding: 0; pointer-events: auto; }
+.glass-footer {
+  --background: transparent;
+  background: transparent;
+  padding: 0 16px calc(14px + env(safe-area-inset-bottom));
+  border: 0;
+  pointer-events: none;
+}
+.glass-footer ion-toolbar {
+  --background: transparent;
+  --border-width: 0;
+  min-height: 34px;
+  padding: 0;
+  pointer-events: auto;
+  display: flex;
+  justify-content: center;
+}
 .glass-footer ion-segment {
-  --background: #ffffff;
-  width: 100%;
-  min-height: 30px;
-  padding: 1px;
+  --background: transparent;
+  background: transparent;
+  width: auto;
+  min-height: 64px;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+}
+.glass-footer ion-segment::part(native) {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #ffffff;
+  min-height: 64px;
+  padding: 6px;
   border: 1px solid #edf0f4;
-  border-radius: 18px;
+  border-radius: 24px;
   box-shadow: 0 6px 20px rgba(16,24,80,.10), 0 1px 3px rgba(16,24,80,.05);
 }
 .glass-footer ion-segment-button {
@@ -326,18 +357,19 @@ ion-item-option { text-transform: none; font-weight: 700; }
   --color: #9aaac4;
   --color-checked: #7b2ff7;
   --indicator-color: transparent;
-  --border-radius: 20px;
-  min-height: 28px;
+  min-height: 52px;
+  min-width: 52px;
   margin: 0;
   padding: 0;
+  flex: 0 0 auto;
   text-transform: none;
   font-weight: 700;
   letter-spacing: -.01em;
 }
 .glass-footer ion-segment-button ion-icon {
-  font-size: 17px;
+  font-size: 22px;
   margin-bottom: 0;
-  padding: 5px;
+  padding: 10px;
   border-radius: 50%;
   transition: background .18s ease;
 }
@@ -346,7 +378,7 @@ ion-item-option { text-transform: none; font-weight: 700; }
   color: #7b2ff7;
 }
 .glass-footer ion-segment-button ion-label { font-size: 11px; font-weight: 800; }
-.glass-footer ion-segment-button::part(native) { border-radius: 20px; transition: background .18s ease; }
+.glass-footer ion-segment-button::part(native) { background: transparent; border-radius: 20px; transition: background .18s ease; }
 .glass-footer ion-segment-button::part(indicator) { display: none; }
 
 ion-button:not(.clear-button):not(.primary-action):not(.secondary-action) { --background: #f0f4ff; --color: var(--accent); --border-color: #d0daff; --border-width: 1px; --border-style: solid; box-shadow: 0 2px 8px rgba(16,24,80,.06); transition: transform .18s ease; }
@@ -355,5 +387,4 @@ ion-button:not(.clear-button):active { transform: scale(.985); }
 @media (prefers-reduced-motion: reduce) { .ticket.print { animation: none; } }
 @media (min-width: 600px) {
   .sheet { max-width: 560px; margin: 0 auto; padding-left: 26px; padding-right: 26px; }
-  .glass-footer { padding-left: calc((100% - 560px)/2 + 10px); padding-right: calc((100% - 560px)/2 + 10px); }
 }
