@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { IonButton, IonIcon, useIonToast } from '@ionic/react';
 import {
   calendarOutline, chevronDownOutline, copyOutline, desktopOutline,
-  eyeOffOutline, flashOutline, lockClosedOutline, personOutline,
-  shareSocialOutline, shieldCheckmarkOutline, sparklesOutline
+  eyeOffOutline, lockClosedOutline, personOutline,
+  shareSocialOutline, sparklesOutline
 } from 'ionicons/icons';
 
 import Ticket from '../components/Ticket';
