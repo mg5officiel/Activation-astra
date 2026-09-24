@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { IonButton, IonIcon, IonInput, useIonToast } from '@ionic/react';
+import { IonButton, IonIcon, useIonToast } from '@ionic/react';
 import {
   calendarOutline, chevronDownOutline, copyOutline, desktopOutline,
   eyeOffOutline, flashOutline, lockClosedOutline, personOutline,
@@ -89,16 +89,16 @@ export default function Generate({ onCreated }: { onCreated: (entry: KeyEntry) =
           <label className="visual-label">ID Machine</label>
           <div className="input-wrapper">
             <IonIcon icon={desktopOutline} />
-            <IonInput
+            <input
               className="visual-input mid"
               placeholder="Ex: AST-2025-001234"
               value={mid}
-              maxlength={8}
-              autocapitalize="off"
-              autocorrect={false}
-              spellcheck={false}
-              enterkeyhint="next"
-              onIonInput={(e) => { setMid(String(e.detail.value ?? '')); setSubmitError(null); }}
+              maxLength={8}
+              autoCapitalize="off"
+              autoCorrect="off"
+              spellCheck={false}
+              enterKeyHint="next"
+              onChange={(e) => { setMid(e.target.value); setSubmitError(null); }}
               onKeyDown={onEnter}
             />
           </div>
@@ -112,17 +112,17 @@ export default function Generate({ onCreated }: { onCreated: (entry: KeyEntry) =
           <label className="visual-label">Phrase secrète</label>
           <div className="input-wrapper">
             <IonIcon icon={lockClosedOutline} />
-            <IonInput
+            <input
               className="visual-input"
               type="password"
               placeholder="Entrez la phrase secrète"
               value={secret}
-              maxlength={200}
-              autocapitalize="off"
-              autocorrect={false}
-              spellcheck={false}
-              enterkeyhint="next"
-              onIonInput={(e) => { setSecret(String(e.detail.value ?? '')); setSubmitError(null); }}
+              maxLength={200}
+              autoCapitalize="off"
+              autoCorrect="off"
+              spellCheck={false}
+              enterKeyHint="next"
+              onChange={(e) => { setSecret(e.target.value); setSubmitError(null); }}
               onKeyDown={onEnter}
             />
             <button className="eye-btn" type="button" aria-label="Afficher/masquer">
@@ -162,13 +162,13 @@ export default function Generate({ onCreated }: { onCreated: (entry: KeyEntry) =
           </label>
           <div className="input-wrapper">
             <IonIcon icon={personOutline} />
-            <IonInput
+            <input
               className="visual-input"
               placeholder="Entrez le nom du client"
               value={client}
-              maxlength={60}
-              enterkeyhint="go"
-              onIonInput={(e) => setClient(String(e.detail.value ?? ''))}
+              maxLength={60}
+              enterKeyHint="go"
+              onChange={(e) => setClient(e.target.value)}
               onKeyDown={onEnter}
             />
           </div>
@@ -210,3 +210,4 @@ export default function Generate({ onCreated }: { onCreated: (entry: KeyEntry) =
     </>
   );
 }
+ 
