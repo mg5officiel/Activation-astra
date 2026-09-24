@@ -277,7 +277,7 @@ ion-item-option { text-transform: none; font-weight: 700; }
 .ticket-client strong { display: block; margin-top: 3px; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ticket-key-label { margin: 20px 18px 7px; }
 .key-shell { margin: 0 18px; padding: 15px 13px; border-radius: 15px; background: #f4f7fb; border: 1px solid #e5eaf1; }
-.key { display: flex; flex-wrap: wrap; gap: 4px 0; margin: 0; font: 800 clamp(16px,4.8vw,25px)/1.25 var(--mono); letter-spacing: .035em; user-select: all; color: #101828; }
+.key { display: flex; flex-wrap: wrap; gap: 4px 0; margin: 0; font: 800 clamp(11px,3.6vw,17px)/1.25 var(--mono); letter-spacing: .035em; user-select: all; color: #101828; }
 .key .g:not(:last-child):after { content: "-"; margin: 0 .18em; color: #a3adba; }
 .ticket-meta { display: grid; grid-template-columns: 1.2fr .8fr 1fr; gap: 8px; margin: 12px 18px 0; }
 .ticket-meta div { min-width: 0; padding: 10px; border-top: 1px solid #edf0f4; }
