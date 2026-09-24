@@ -314,72 +314,54 @@ ion-item-option { text-transform: none; font-weight: 700; }
 .empty-state { margin: 0; padding: 30px 22px; text-align: center; color: var(--ink-soft); background: #fff; border: 1px dashed #d7dee8; border-radius: 17px; line-height: 1.55; }
 .warn { margin: 28px 2px 0; padding: 13px 14px; color: #667085; background: #f8fafc; border: 1px solid #edf0f4; border-radius: 13px; font-size: 11.5px; line-height: 1.5; text-align: center; }
 
-/* ── Bottom Tab Bar ── */
+/* ── Bottom Tab Bar (HTML natif — pas de shadow DOM Ionic) ── */
 .glass-footer {
-  --background: transparent;
-  background: transparent;
-  padding: 0 16px calc(14px + env(safe-area-inset-bottom));
-  border: 0;
-  pointer-events: none;
-}
-.glass-footer ion-toolbar {
-  --background: transparent;
-  --border-width: 0;
-  min-height: 34px;
-  padding: 0;
-  pointer-events: auto;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
   display: flex;
   justify-content: center;
+  padding: 0 16px calc(14px + env(safe-area-inset-bottom));
+  pointer-events: none;
 }
-.glass-footer ion-segment {
-  --background: transparent;
-  background: transparent;
-  width: auto;
-  min-height: 64px;
-  padding: 0;
-  border: none;
-  box-shadow: none;
-}
-.glass-footer ion-segment::part(native) {
+.tab-pill {
   display: flex;
   align-items: center;
   gap: 4px;
-  background: #ffffff;
+  width: auto;
   min-height: 64px;
   padding: 6px;
+  background: #ffffff;
   border: 1px solid #edf0f4;
   border-radius: 24px;
   box-shadow: 0 6px 20px rgba(16,24,80,.10), 0 1px 3px rgba(16,24,80,.05);
+  pointer-events: auto;
 }
-.glass-footer ion-segment-button {
-  --background: transparent;
-  --background-checked: transparent;
-  --color: #9aaac4;
-  --color-checked: #7b2ff7;
-  --indicator-color: transparent;
-  min-height: 52px;
+.tab-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   min-width: 52px;
+  min-height: 52px;
   margin: 0;
   padding: 0;
-  flex: 0 0 auto;
-  text-transform: none;
-  font-weight: 700;
-  letter-spacing: -.01em;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #9aaac4;
 }
-.glass-footer ion-segment-button ion-icon {
+.tab-btn ion-icon {
   font-size: 22px;
-  margin-bottom: 0;
   padding: 10px;
   border-radius: 50%;
-  transition: background .18s ease;
+  transition: background .18s ease, color .18s ease;
 }
-.glass-footer ion-segment-button.segment-button-checked ion-icon {
+.tab-btn--active ion-icon {
   background: #f4eaff;
   color: #7b2ff7;
 }
-.glass-footer ion-segment-button ion-label { font-size: 11px; font-weight: 800; }
-.glass-footer ion-segment-button::part(native) { background: transparent; border-radius: 20px; transition: background .18s ease; }
-.glass-footer ion-segment-button::part(indicator) { display: none; }
 
 ion-button:not(.clear-button):not(.primary-action):not(.secondary-action) { --background: #f0f4ff; --color: var(--accent); --border-color: #d0daff; --border-width: 1px; --border-style: solid; box-shadow: 0 2px 8px rgba(16,24,80,.06); transition: transform .18s ease; }
 ion-button:not(.clear-button):active { transform: scale(.985); }
