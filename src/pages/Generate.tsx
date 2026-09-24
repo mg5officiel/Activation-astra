@@ -77,9 +77,7 @@ export default function Generate({ onCreated }: { onCreated: (entry: KeyEntry) =
   return (
     <>
       <div className="screen-heading">
-        <span className="eyebrow">NOUVELLE ACTIVATION</span>
         <h1>Générer une clé</h1>
-        <p>Entrez les informations ci-dessous pour générer une clé d'activation sécurisée.</p>
       </div>
 
       <section className="generate-card">
@@ -180,13 +178,6 @@ export default function Generate({ onCreated }: { onCreated: (entry: KeyEntry) =
           Générer la clé
           <span slot="end" className="cta-arrow">→</span>
         </IonButton>
-
-        {/* Feature strip */}
-        <div className="feature-strip" aria-label="Avantages">
-          <div><IonIcon icon={shieldCheckmarkOutline} /><span>Sécurisé</span></div>
-          <div><IonIcon icon={flashOutline} /><span>Rapide</span></div>
-          <div><IonIcon icon={lockClosedOutline} /><span>Fiable</span></div>
-        </div>
       </section>
 
       {current && (
