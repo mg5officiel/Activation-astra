@@ -13,9 +13,7 @@ export default function History({ entries, onRemove }: Props) {
   return (
     <>
       <div className="screen-heading">
-        <span className="eyebrow">ARCHIVES</span>
         <h1>Historique</h1>
-        <p>Retrouvez rapidement vos clés déjà générées.</p>
       </div>
       <IonList lines="none" className="h-list">
         {entries.map((e) => (
