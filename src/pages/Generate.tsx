@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { IonButton, IonIcon, useIonToast } from '@ionic/react';
 import {
   calendarOutline, chevronDownOutline, copyOutline, downloadOutline, desktopOutline, lockClosedOutline, personOutline,
@@ -26,6 +26,7 @@ export default function Generate({ onCreated }: { onCreated: (entry: KeyEntry) =
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [current, setCurrent] = useState<KeyEntry | null>(null);
   const [ticketOpen, setTicketOpen] = useState(false);
+  const ticketRef = useRef<HTMLDivElement>(null);
   const [toast] = useIonToast();
   const notify = (message: string) => toast({ message, duration: 1600, position: 'top' });
 
@@ -171,7 +172,7 @@ export default function Generate({ onCreated }: { onCreated: (entry: KeyEntry) =
         </IonButton>
       </section>
 
-      <TicketModal isOpen={ticketOpen} entry={current} onClose={() => setTicketOpen(false)}>
+      <TicketModal isOpen={ticketOpen} entry={current} onClose={() => setTicketOpen(false)} ref={ticketRef}>
         {current && (
           <div className="actions">
             <IonButton className="secondary-action" expand="block"
@@ -179,11 +180,21 @@ export default function Generate({ onCreated }: { onCreated: (entry: KeyEntry) =
               <IonIcon slot="start" icon={copyOutline} />Copier la clé
             </IonButton>
             <IonButton className="secondary-action" expand="block"
-              onClick={async () => { try { await saveTicketJpg(current); notify('Ticket JPG enregistré'); } catch { notify("Enregistrement impossible"); } }}>
+              onClick={async () => {
+                const el = ticketRef.current;
+                if (!el) return;
+                try { await saveTicketJpg(el, current); notify('Ticket JPG enregistré'); }
+                catch { notify('Enregistrement impossible'); }
+              }}>
               <IonIcon slot="start" icon={downloadOutline} />Enregistrer JPG
             </IonButton>
             <IonButton className="secondary-action" expand="block" fill="outline"
-              onClick={async () => { try { await shareTicketJpg(current); } catch { notify("Partage annulé"); } }}>
+              onClick={async () => {
+                const el = ticketRef.current;
+                if (!el) return;
+                try { await shareTicketJpg(el, current); }
+                catch { notify('Partage annulé'); }
+              }}>
               <IonIcon slot="start" icon={shareSocialOutline} />Partager en JPG
             </IonButton>
             <p className="note">
