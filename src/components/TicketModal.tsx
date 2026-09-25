@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import { IonIcon } from '@ionic/react';
 import { closeOutline } from 'ionicons/icons';
 import Ticket from './Ticket';
@@ -10,28 +11,33 @@ type TicketModalProps = {
   children?: React.ReactNode;
 };
 
-export default function TicketModal({ isOpen, entry, onClose, children }: TicketModalProps) {
-  if (!isOpen || !entry) return null;
+const TicketModal = forwardRef<HTMLDivElement, TicketModalProps>(
+  ({ isOpen, entry, onClose, children }, ticketRef) => {
+    if (!isOpen || !entry) return null;
 
-  return (
-    <div className="ticket-modal" role="dialog" aria-modal="true" aria-label="Ticket de clé générée">
-      <button className="ticket-modal-backdrop" type="button" aria-label="Fermer" onClick={onClose} />
-      <div className="ticket-modal-panel">
-        <div className="ticket-modal-header">
-          <div>
-            <span className="ticket-modal-kicker">ACTIVATION TERMINÉE</span>
-            <h2>Ticket de résultat</h2>
+    return (
+      <div className="ticket-modal" role="dialog" aria-modal="true" aria-label="Ticket de clé générée">
+        <button className="ticket-modal-backdrop" type="button" aria-label="Fermer" onClick={onClose} />
+        <div className="ticket-modal-panel">
+          <div className="ticket-modal-header">
+            <div>
+              <span className="ticket-modal-kicker">ACTIVATION TERMINÉE</span>
+              <h2>Ticket de résultat</h2>
+            </div>
+            <button className="ticket-modal-close" type="button" aria-label="Fermer" onClick={onClose}>
+              <IonIcon icon={closeOutline} />
+            </button>
           </div>
-          <button className="ticket-modal-close" type="button" aria-label="Fermer" onClick={onClose}>
-            <IonIcon icon={closeOutline} />
-          </button>
-        </div>
 
-        <div className="ticket-modal-content">
-          <Ticket entry={entry} />
-          {children}
+          <div className="ticket-modal-content">
+            <Ticket entry={entry} ref={ticketRef} />
+            {children}
+          </div>
         </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
+);
+
+export default TicketModal;
+ 
