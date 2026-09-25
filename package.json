@@ -14,15 +14,16 @@
     "@capacitor/android": "^8.5.2",
     "@capacitor/clipboard": "^8.0.1",
     "@capacitor/core": "^8.5.2",
+    "@capacitor/filesystem": "^8.0.1",
     "@capacitor/preferences": "^8.0.1",
     "@capacitor/share": "^8.0.2",
     "@fontsource/courier-prime": "^5.3.0",
     "@fontsource/public-sans": "^5.3.0",
     "@ionic/react": "^9.0.4",
+    "html-to-image": "^1.11.13",
     "ionicons": "^8.1.0",
     "react": "^19.3.0",
-    "react-dom": "^19.3.0",
-    "@capacitor/filesystem": "^8.0.1"
+    "react-dom": "^19.3.0"
   },
   "devDependencies": {
     "@capacitor/cli": "^8.5.2",
@@ -33,3 +34,4 @@
     "vite": "^8.3.0"
   }
 }
+ 
