@@ -1,0 +1,60 @@
+name: Build iOS
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "src/**"
+      - "public/**"
+      - "package.json"
+      - "package-lock.json"
+      - "capacitor.config.ts"
+      - ".github/workflows/ios.yml"
+
+jobs:
+  build-ios-simulator:
+    runs-on: macos-15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install web dependencies
+        run: npm ci
+
+      - name: Install Capacitor iOS platform
+        run: npm install --no-save @capacitor/ios@^8.5.2
+
+      - name: Build web app
+        run: npm run build
+
+      - name: Generate iOS project
+        run: npx cap add ios
+
+      - name: Set minimum iOS version
+        shell: bash
+        run: |
+          find ios -name project.pbxproj -print0 | xargs -0 sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = [0-9.]\+;/IPHONEOS_DEPLOYMENT_TARGET = 18.0;/g'
+          grep -R "IPHONEOS_DEPLOYMENT_TARGET" ios/App/App.xcodeproj/project.pbxproj
+
+      - name: Sync Capacitor plugins
+        run: npx cap sync ios
+
+      - name: Build iOS Simulator app
+        run: |
+          xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Release -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' -derivedDataPath build/ios CODE_SIGNING_ALLOWED=NO build
+          ditto -c -k --sequesterRsrc --keepParent build/ios/Build/Products/Release-iphonesimulator/App.app AstraKey-iOS-Simulator.zip
+
+      - name: Upload iOS simulator build
+        uses: actions/upload-artifact@v4
+        with:
+          name: AstraKey-iOS-Simulator
+          path: AstraKey-iOS-Simulator.zip
+          if-no-files-found: error
+          retention-days: 14
